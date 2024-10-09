@@ -1,7 +1,11 @@
 [package]
-name = "chunks"
+name = "chunks-rs"
 version = "0.1.0"
+authors = ["Derek Russell russellderek01@gmail.com"]
 edition = "2021"
+license = "MIT OR Apache-2.0"
+categories = ["gui", "date_and_time", "value_formatting", "filesystem"]
+keywords = ["widget", "GUI", "widgets", "frontend", "toolkit"]
 
 [dependencies]
 chrono = "0.4.38"
@@ -9,7 +13,3 @@ gio = "0.20.4"
 gtk4 = { version = "0.9.2", features = ["v4_6"] }
 gtk4-layer-shell = "0.4.0"
 sysinfo = "0.29.3"
-
-[lib]
-name = "chunks"
-path = "src/lib.rs"
