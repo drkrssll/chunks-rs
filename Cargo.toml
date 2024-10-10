@@ -1,6 +1,6 @@
 [package]
 name = "chunks-rs"
-version = "0.1.1"
+version = "0.2.0"
 authors = ["Derek Russell russellderek01@gmail.com"]
 edition = "2021"
 

@@ -32,7 +32,7 @@ pub struct Internal;
 pub struct Wayland;
 
 #[derive(Debug, Clone, Copy)]
-struct EdgeConfig {
+pub struct EdgeConfig {
     left: (Edge, bool),
     right: (Edge, bool),
     top: (Edge, bool),
