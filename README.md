@@ -8,7 +8,7 @@ Uses GTK4 and GTK4 Layer Shell at its core, for ease of use with both X11 and Wa
 
 ```toml
 [dependencies]
-chunks-rs = "0.3.2"
+chunks-rs = "0.3.3"
 ```
 
 ```rs
@@ -40,7 +40,8 @@ fn main() {
         let margins = vec![(Edge::Top, 20), (Edge::Right, 20)];
 
         Internal::update_storage(&tag, storage);
-        Internal::load_css(STYLE);
+
+        load_css(STYLE);
 
         Chunk::new(
             factory,

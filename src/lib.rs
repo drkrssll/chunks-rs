@@ -11,6 +11,7 @@ pub use chunk::Chunk;
 pub use edge_conf::EdgeConfig;
 pub use factory::Factory;
 pub use internal::Internal;
+pub use utils::load_css;
 pub use wayland::Wayland;
 
 pub use chrono::Local;
