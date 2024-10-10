@@ -14,7 +14,9 @@ homepage = "https://github.com/drkrssll/chunks-rs/blob/main/README.md"
 
 [dependencies]
 chrono = "0.4.38"
+gdk4-x11 = "0.9.2"
 gio = "0.20.4"
 gtk4 = { version = "0.9.2", features = ["v4_6"] }
 gtk4-layer-shell = "0.4.0"
 sysinfo = "0.29.3"
+x11 = { version = "2.19", features = ["xlib"] }
