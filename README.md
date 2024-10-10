@@ -8,7 +8,7 @@ Uses GTK4 and GTK4 Layer Shell at its core, for ease of use with both X11 and Wa
 
 ```toml
 [dependencies]
-chunks-rs = "0.3.0"
+chunks-rs = "0.3.1"
 ```
 
 ```rs
@@ -17,7 +17,7 @@ window {
     background-color: transparent;
 }
 
-#clock {
+#storage {
     font-size: 34px;
     background-color: #000000;
     color: #FFFFFF;
@@ -28,20 +28,18 @@ fn main() {
     let factory = Factory::new("chunk.factory");
 
     factory.pollute(move |factory: &Application| {
-        let time = Local::now();
-        let formatted_time = format!(
-            "{}:{}"
-            time.format("%I").to_string(),
-            time.format("%M").to_string(),
+        let storage = format!(
+            "Disk: {}",
+            get_storage()
         );
 
-        let title = "Clock Example";
-        let tag = Chunk::tag("clock");
+        let title = "Storage Example";
+        let tag = Chunk::tag("storage");
 
         let anchors = EdgeConfig::TOP_RIGHT.to_vec();
         let margins = vec![(Edge::Top, 20), (Edge::Right, 20)];
 
-        Internal::handle_time(&tag, formatted_time);
+        Internal::update_storage(&tag, storage);
         Internal::load_css(STYLE);
 
         Chunk::new(

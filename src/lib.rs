@@ -117,6 +117,9 @@ impl Chunk {
             Wayland::setup_window(&chunk, margins, anchors, layer);
         }
 
+        chunk.set_decorated(false);
+        chunk.set_resizable(false);
+
         chunk.present();
     }
 
@@ -128,24 +131,10 @@ impl Chunk {
 }
 
 impl Internal {
-    pub fn handle_time(css_tag: &Label, text: String) {
+    pub fn update_widget(css_tag: &Label, text: String, interval: u32) {
         let css_tag = css_tag.clone();
 
-        timeout_add_seconds_local(1, move || {
-            if text.contains("</") && text.contains('>') {
-                css_tag.set_markup(&text);
-            } else {
-                css_tag.set_text(&text);
-            };
-
-            gio::glib::ControlFlow::Continue
-        });
-    }
-
-    pub fn update_storage(css_tag: &Label, text: String) {
-        let css_tag = css_tag.clone();
-
-        let update_storage_usage = move || {
+        let update = move || {
             if text.contains("</") && text.contains('>') {
                 css_tag.set_markup(&text);
             } else {
@@ -155,9 +144,17 @@ impl Internal {
             ControlFlow::Continue
         };
 
-        update_storage_usage();
+        update();
 
-        timeout_add_seconds_local(60, update_storage_usage);
+        timeout_add_seconds_local(interval, update);
+    }
+
+    pub fn update_time(css_tag: &Label, text: String) {
+        Internal::update_widget(css_tag, text, 1)
+    }
+
+    pub fn update_storage(css_tag: &Label, text: String) {
+        Internal::update_widget(css_tag, text, 120)
     }
 
     pub fn get_storage() -> f64 {
