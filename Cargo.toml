@@ -5,7 +5,7 @@ authors = ["Derek Russell russellderek01@gmail.com"]
 edition = "2021"
 
 license = "MIT OR Apache-2.0"
-categories = ["gui", "date_and_time", "value_formatting", "filesystem"]
+categories = ["gui", "filesystem"]
 keywords = ["widget", "GUI", "widgets", "frontend", "toolkit"]
 
 description = "A library for making GTK4 widgets, inspired by Elkowar's Wacky Widgets."
