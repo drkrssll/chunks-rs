@@ -9,7 +9,7 @@ use std::{
     time::Duration,
 };
 
-use chrono::Local;
+pub use chrono::Local;
 use gio::glib::{clone::Downgrade, timeout_add_local, ControlFlow};
 pub use gtk4::Application;
 use gtk4::{
@@ -103,8 +103,8 @@ impl Chunk {
         factory: &Application,
         title: &str,
         tag: Label,
-        margins: Vec<(Edge, i32)>,
         anchors: Vec<(Edge, bool)>,
+        margins: Vec<(Edge, i32)>,
         layer: Layer,
     ) {
         let chunk = ApplicationWindow::builder()
@@ -128,69 +128,29 @@ impl Chunk {
 }
 
 impl Internal {
-    pub fn handle_time(clock_label: &Label) {
-        let clock_clone = clock_label.clone();
+    pub fn handle_time(css_tag: &Label, text: String) {
+        let css_tag = css_tag.clone();
 
-        let current_time = Local::now();
-        let initial_text = format!(
-            "<span background='#000000' foreground='#FFFFFF' size='large'>{}</span>\n<span foreground='#fabbc2' size='small'>{}  </span><span foreground='#FF0110' weight='bold' size='small'>{}</span>",
-            current_time.format("%a").to_string(),
-            current_time.format("%b").to_string(),
-            current_time.format("%d").to_string(),
-        );
+        timeout_add_seconds_local(1, move || {
+            if text.contains("</") && text.contains('>') {
+                css_tag.set_markup(&text);
+            } else {
+                css_tag.set_text(&text);
+            };
 
-        clock_clone.set_markup(&initial_text);
-
-        timeout_add_seconds_local(2, move || {
-            let clock_clone = clock_clone.clone();
-            timeout_add_seconds_local(1, move || {
-                let current_time = Local::now();
-
-                let formatted_time = format!(
-                    "<span foreground='#FFFFFF' size='large'>{}</span><span foreground='#FF0110' weight='bold' size='small'>  {}</span>\n<span foreground='#FFFFFF' size='large'> {}</span>",
-                    current_time.format("%I").to_string(),
-                    current_time.format("%p").to_string(),
-                    current_time.format("%M").to_string(),
-                );
-
-                clock_clone.set_markup(&formatted_time);
-
-                gio::glib::ControlFlow::Continue
-            });
-
-            gio::glib::ControlFlow::Break
+            gio::glib::ControlFlow::Continue
         });
     }
 
-    pub fn handle_storage(storage_label: &Label) {
-        let storage_clone = storage_label.clone();
+    pub fn update_storage(css_tag: &Label, text: String) {
+        let css_tag = css_tag.clone();
 
         let update_storage_usage = move || {
-            let mut system = System::new_all();
-            system.refresh_disks();
-
-            let total_space: u64 = system.disks().iter().map(|disk| disk.total_space()).sum();
-            let available_space: u64 = system
-                .disks()
-                .iter()
-                .map(|disk| disk.available_space())
-                .sum();
-
-            if total_space == 0 {
-                eprintln!("Warning: Total disk space is zero. Check system.disks() output.");
-                storage_clone.set_text("Disk: Error");
-                return ControlFlow::Continue;
-            }
-
-            let used_percentage =
-                ((total_space - available_space) as f64 / total_space as f64 * 100.0).round();
-
-            let formatted_storage = format!(
-                "<span foreground='#FF0000' size='large'>/ </span><span foreground='#FFFFFF' size='large'>{:.0}%</span>",
-                used_percentage
-            );
-
-            storage_clone.set_markup(&formatted_storage);
+            if text.contains("</") && text.contains('>') {
+                css_tag.set_markup(&text);
+            } else {
+                css_tag.set_text(&text);
+            };
 
             ControlFlow::Continue
         };
@@ -198,6 +158,23 @@ impl Internal {
         update_storage_usage();
 
         timeout_add_seconds_local(60, update_storage_usage);
+    }
+
+    pub fn get_storage() -> f64 {
+        let mut system = System::new_all();
+        system.refresh_disks();
+
+        let total_space: u64 = system.disks().iter().map(|disk| disk.total_space()).sum();
+        let available_space: u64 = system
+            .disks()
+            .iter()
+            .map(|disk| disk.available_space())
+            .sum();
+
+        let used_percentage =
+            ((total_space - available_space) as f64 / total_space as f64 * 100.0).round();
+
+        used_percentage
     }
 
     pub fn load_css(style: &str) {

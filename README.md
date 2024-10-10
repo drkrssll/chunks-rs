@@ -8,7 +8,7 @@ Uses GTK4 and GTK4 Layer Shell at its core, for ease of use with both X11 and Wa
 
 ```toml
 [dependencies]
-chunks-rs = "0.2.2"
+chunks-rs = "0.3.0"
 ```
 
 ```rs
@@ -17,7 +17,7 @@ window {
     background-color: transparent;
 }
 
-#clock_label {
+#clock {
     font-size: 34px;
     background-color: #000000;
     color: #FFFFFF;
@@ -27,24 +27,31 @@ window {
 fn main() {
     let factory = Factory::new("chunk.factory");
 
-    let chunks = move |factory: &Application| {
-        let clock_tag = Chunk::tag("clock_label");
-        let clock_margins = vec![(Edge::Top, 20), (Edge::Right, 20)];
-        let clock_edge = EdgeConfig::TOP_RIGHT.to_vec();
+    factory.pollute(move |factory: &Application| {
+        let time = Local::now();
+        let formatted_time = format!(
+            "{}:{}"
+            time.format("%I").to_string(),
+            time.format("%M").to_string(),
+        );
 
-        Internal::handle_time(&clock_tag);
+        let title = "Clock Example";
+        let tag = Chunk::tag("clock");
+
+        let anchors = EdgeConfig::TOP_RIGHT.to_vec();
+        let margins = vec![(Edge::Top, 20), (Edge::Right, 20)];
+
+        Internal::handle_time(&tag, formatted_time);
         Internal::load_css(STYLE);
 
         Chunk::new(
             factory,
-            "Clock",
-            clock_tag,
-            clock_margins,
-            clock_edge,
+            title,
+            tag,
+            anchors,
+            margins,
             Layer::Overlay,
         );
-    };
-
-    factory.pollute(chunks)
+    });
 }
 ```
