@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 use std::{
     env,
     io::{BufRead, BufReader, Write},
@@ -19,15 +21,15 @@ use gtk4::{
 use gtk4_layer_shell::{Edge, Layer, LayerShell};
 use sysinfo::{DiskExt, System, SystemExt};
 
-struct Factory {
+pub struct Factory {
     application: Application,
 }
 
-struct Chunk;
+pub struct Chunk;
 
-struct Internal;
+pub struct Internal;
 
-struct Wayland;
+pub struct Wayland;
 
 #[derive(Debug, Clone, Copy)]
 struct EdgeConfig {
@@ -38,54 +40,54 @@ struct EdgeConfig {
 }
 
 impl EdgeConfig {
-    const TOP_RIGHT: Self = Self {
+    pub const TOP_RIGHT: Self = Self {
         left: (Edge::Left, false),
         right: (Edge::Right, true),
         top: (Edge::Top, true),
         bottom: (Edge::Bottom, false),
     };
 
-    const BOTTOM_RIGHT: Self = Self {
+    pub const BOTTOM_RIGHT: Self = Self {
         left: (Edge::Left, false),
         right: (Edge::Right, true),
         top: (Edge::Top, false),
         bottom: (Edge::Bottom, true),
     };
 
-    const TOP_LEFT: Self = Self {
+    pub const TOP_LEFT: Self = Self {
         left: (Edge::Left, true),
         right: (Edge::Right, false),
         top: (Edge::Top, true),
         bottom: (Edge::Bottom, false),
     };
 
-    const BOTTOM_LEFT: Self = Self {
+    pub const BOTTOM_LEFT: Self = Self {
         left: (Edge::Left, true),
         right: (Edge::Right, false),
         top: (Edge::Top, false),
         bottom: (Edge::Bottom, true),
     };
 
-    const CENTER: Self = Self {
+    pub const CENTER: Self = Self {
         left: (Edge::Left, true),
         right: (Edge::Right, true),
         top: (Edge::Top, true),
         bottom: (Edge::Bottom, true),
     };
 
-    fn to_vec(&self) -> Vec<(Edge, bool)> {
+    pub fn to_vec(&self) -> Vec<(Edge, bool)> {
         vec![self.left, self.right, self.top, self.bottom]
     }
 }
 
 impl Factory {
-    fn new(id: &str) -> Self {
+    pub fn new(id: &str) -> Self {
         gtk4::init().expect("Failed to initialize GTK");
         let application = Application::builder().application_id(id).build();
         Self { application }
     }
 
-    fn pollute(&self, chunks: impl Fn(&Application) + 'static) -> ExitCode {
+    pub fn pollute(&self, chunks: impl Fn(&Application) + 'static) -> ExitCode {
         self.application.connect_activate(move |app| {
             chunks(app);
         });
@@ -95,7 +97,7 @@ impl Factory {
 }
 
 impl Chunk {
-    fn new(
+    pub fn new(
         factory: &Application,
         title: &str,
         tag: Label,
@@ -116,7 +118,7 @@ impl Chunk {
         chunk.present();
     }
 
-    fn tag(class_name: &str) -> Label {
+    pub fn tag(class_name: &str) -> Label {
         let tag = Label::new(None);
         tag.set_widget_name(class_name);
         tag
@@ -124,7 +126,7 @@ impl Chunk {
 }
 
 impl Internal {
-    fn handle_time(clock_label: &Label) {
+    pub fn handle_time(clock_label: &Label) {
         let clock_clone = clock_label.clone();
 
         let current_time = Local::now();
@@ -158,7 +160,7 @@ impl Internal {
         });
     }
 
-    fn handle_storage(storage_label: &Label) {
+    pub fn handle_storage(storage_label: &Label) {
         let storage_clone = storage_label.clone();
 
         let update_storage_usage = move || {
@@ -196,7 +198,7 @@ impl Internal {
         timeout_add_seconds_local(60, update_storage_usage);
     }
 
-    fn load_css(style: &str) {
+    pub fn load_css(style: &str) {
         let provider = CssProvider::new();
         provider.load_from_data(style);
 
@@ -211,7 +213,7 @@ impl Internal {
 }
 
 impl Wayland {
-    fn setup_window(
+    pub fn setup_window(
         window: &ApplicationWindow,
         margins: Vec<(Edge, i32)>,
         anchors: Vec<(Edge, bool)>,
@@ -246,7 +248,7 @@ impl Wayland {
         });
     }
 
-    fn detect_wayland() -> bool {
+    pub fn detect_wayland() -> bool {
         let session_type = env::var("XDG_SESSION_TYPE").unwrap_or_default();
         let wayland_display = env::var("WAYLAND_DISPLAY").unwrap_or_default();
 
@@ -254,7 +256,7 @@ impl Wayland {
             || (!wayland_display.is_empty() && !session_type.contains("x11"))
     }
 
-    fn hypr_ipc(window_sender: Sender<bool>) {
+    pub fn hypr_ipc(window_sender: Sender<bool>) {
         let instance_signature = env::var("HYPRLAND_INSTANCE_SIGNATURE")
             .expect("HYPRLAND_INSTANCE_SIGNATURE not found. Is Hyprland running?");
 
