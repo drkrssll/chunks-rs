@@ -10,7 +10,15 @@ pub struct Chunk {
 }
 
 impl Chunk {
-    pub fn new(self) -> ApplicationWindow {
+    pub fn new(factory: Application, title: String, tag: Label) -> Self {
+        Self {
+            factory,
+            title,
+            tag,
+        }
+    }
+
+    pub fn build(self) -> ApplicationWindow {
         let chunk = ApplicationWindow::builder()
             .application(&self.factory)
             .title(self.title)
