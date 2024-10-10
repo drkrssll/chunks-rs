@@ -10,7 +10,7 @@ Uses GTK4 and GTK4 Layer Shell at its core, for ease of use with both X11 and Wa
 [dependencies]
 gtk4 = "0.9.2"
 gtk4-layer-shell = "0.4.0"
-chunks-rs = "0.2.0"
+chunks-rs = "0.2.1"
 ```
 
 ```rs
@@ -26,7 +26,7 @@ window {
 }
 ";
 
-fn main() -> ExitCode {
+fn main() {
     let factory = Factory::new("chunk.factory");
 
     let chunks = move |factory: &Application| {
