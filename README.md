@@ -2,15 +2,20 @@
 
 ![Screenshot](screenshot.jpg)
 
-A library that simplifies the process of making widgets for Unix operating systems.
+A library that simplifies the process of making widgets for Wayland Compositors.
 
-Uses GTK4 and GTK4 Layer Shell at its core, for ease of use with both X11 and Wayland Window Managers.
+Chunks uses GTK4 and GTK4 Layer Shell at its core, and comes stock with a listener for the Hyprland IPC. This helps with changing Widget states when something changes, such as making the current window fullscreen.
+
+## Usage
+
+> For more in depth examples, please refer to [example-chunks](https://github.com/drkrssll/example-chunks)
 
 ```toml
 [dependencies]
-chunks-rs = "0.3.4"
+chunks-rs = "0.3.5"
 ```
 
+This will create a storage widget, similar to the one in the screenshot:
 ```rs
 const STYLE: &str = "
 window {
@@ -27,30 +32,35 @@ window {
 fn main() {
     let factory = Factory::new("chunk.factory");
 
-    factory.pollute(move |factory: &Application| {
-        let storage = format!(
-            "Disk: {}",
-            get_storage()
-        );
-
-        let title = "Storage Example";
-        let tag = Chunk::tag("storage");
-
-        let anchors = EdgeConfig::TOP_RIGHT.to_vec();
-        let margins = vec![(Edge::Top, 20), (Edge::Right, 20)];
-
-        Internal::update_storage(&tag, storage);
+    let chunks = |factory: Application| {
+        storage(factory);
 
         load_css(STYLE);
+    };
 
-        Chunk::new(
-            factory,
-            title,
-            tag,
-            anchors,
-            margins,
-            Layer::Overlay,
-        );
-    });
+    factory.pollute(chunks);
 }
+
+fn storage(factory: Application) {
+    let tag = Chunk::tag("storage");
+
+    let anchors = EdgeConfig::TOP_RIGHT.to_vec();
+    let margins = vec![(Edge::Top, 20), (Edge::Right, 160)];
+
+    let text = format!(
+        "<span>{:.0}%</span>",
+        Internal::get_storage(),
+    );
+
+    Internal::update_storage(&tag, text);
+
+    let chunk = Chunk::new(factory, "Storage".to_string(), tag).build();
+
+    let window = Wayland::new(chunk, margins, anchors, Layer::Bottom);
+
+    window.setup_window()
+}
+
 ```
+
+

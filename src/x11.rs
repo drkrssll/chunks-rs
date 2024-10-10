@@ -1,3 +1,14 @@
+/*
+*
+* X11 support is currently broken, and may never be fixed.
+*
+* I have a preference against unsafe code, but the X protocols require unsafe code.
+*
+* Chunks was intended to be solely for Wayland Compositors - that being said - if
+* someone can get X11 to work properly, be my guest.
+*
+*/
+
 use gdk4_x11::{X11Display, X11Surface};
 use gio::prelude::Cast;
 use gtk4::{
@@ -43,7 +54,6 @@ impl X11 {
                 unsafe {
                     let x11_display = display.xrootwindow() as *mut Display;
 
-                    // Position the window
                     XMoveResizeWindow(
                         x11_display,
                         xid,
@@ -53,7 +63,6 @@ impl X11 {
                         self.height as u32,
                     );
 
-                    // Set window properties
                     if self.always_on_top {
                         let atom = XInternAtom(
                             x11_display,
@@ -90,7 +99,6 @@ impl X11 {
                         );
                     }
 
-                    // Make sure the window manager doesn't move or resize the window
                     let mut hints: XSizeHints = std::mem::zeroed();
                     hints.flags = PPosition | PSize | PMinSize | PMaxSize;
                     hints.x = self.x;

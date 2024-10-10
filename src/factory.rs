@@ -10,15 +10,16 @@ pub struct Factory {
 
 impl Factory {
     pub fn new(id: &str) -> Self {
-        gtk4::init().expect("Failed to initialize GTK");
         let application = Application::builder().application_id(id).build();
+
         Self { application }
     }
 
-    pub fn pollute(&self, chunks: impl Fn(&Application) + 'static) -> ExitCode {
+    pub fn pollute(self, chunks: impl Fn(Application) + 'static) -> ExitCode {
         self.application.connect_activate(move |app| {
-            chunks(app);
+            chunks(app.clone());
         });
+
         self.application.run();
         ExitCode::SUCCESS
     }
