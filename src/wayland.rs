@@ -9,29 +9,11 @@ use std::{
 
 use gio::glib::{clone::Downgrade, timeout_add_local};
 use gtk4::{prelude::WidgetExt, ApplicationWindow};
-use gtk4_layer_shell::LayerShell;
-pub use gtk4_layer_shell::{Edge, Layer};
 
 pub struct Wayland;
 
 impl Wayland {
-    pub fn setup_window(
-        window: &ApplicationWindow,
-        margins: Vec<(Edge, i32)>,
-        anchors: Vec<(Edge, bool)>,
-        layout: Layer,
-    ) {
-        window.init_layer_shell();
-        window.set_layer(layout);
-
-        for (edge, margin) in margins {
-            window.set_margin(edge, margin)
-        }
-
-        for (anchor, state) in anchors {
-            window.set_anchor(anchor, state);
-        }
-
+    pub fn setup_window(window: &ApplicationWindow) {
         let (window_sender, window_receiver) = channel::<bool>();
         Wayland::hypr_ipc(window_sender);
 
