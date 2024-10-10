@@ -11,14 +11,16 @@ use std::{
 
 use chrono::Local;
 use gio::glib::{clone::Downgrade, timeout_add_local, ControlFlow};
+pub use gtk4::Application;
 use gtk4::{
     gdk::Display,
     glib::{timeout_add_seconds_local, ExitCode},
     prelude::{ApplicationExt, ApplicationExtManual, GtkWindowExt, WidgetExt},
-    style_context_add_provider_for_display, Application, ApplicationWindow, CssProvider, Label,
+    style_context_add_provider_for_display, ApplicationWindow, CssProvider, Label,
     STYLE_PROVIDER_PRIORITY_APPLICATION,
 };
-use gtk4_layer_shell::{Edge, Layer, LayerShell};
+use gtk4_layer_shell::LayerShell;
+pub use gtk4_layer_shell::{Edge, Layer};
 use sysinfo::{DiskExt, System, SystemExt};
 
 pub struct Factory {
