@@ -1,5 +1,7 @@
 # Chunks-rs
 
+![Screenshot](screenshot.jpg)
+
 A library that simplifies the process of making widgets for Unix operating systems.
 
 Uses GTK4 and GTK4 Layer Shell at its core, for ease of use with both X11 and Wayland Window Managers.
