@@ -23,7 +23,8 @@ impl Chunk {
             .child(&tag)
             .build();
 
-        chunk.init_layer_shell();
+        LayerShell::init_layer_shell(&chunk);
+
         chunk.set_layer(layer);
 
         for (edge, margin) in &margins {
