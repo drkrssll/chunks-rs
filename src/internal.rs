@@ -17,8 +17,8 @@ impl Internal {
         css_tag: &Label,
         text: String,
         sleep: u32,
-        interval: u32,
         updated_text: String,
+        interval: u32,
     ) {
         let css_tag = css_tag.clone();
         let css_updater = css_tag.clone();

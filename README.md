@@ -33,7 +33,7 @@ fn main() {
     let factory = Factory::new("chunk.factory");
 
     let chunks = |factory: Application| {
-        storage(factory);
+        storage(&factory);
 
         load_css(STYLE);
     };
@@ -41,7 +41,7 @@ fn main() {
     factory.pollute(chunks);
 }
 
-fn storage(factory: Application) {
+fn storage(factory: &Application) {
     let tag = Chunk::tag("storage");
 
     let anchors = EdgeConfig::TOP_RIGHT.to_vec();
@@ -54,7 +54,7 @@ fn storage(factory: Application) {
 
     Internal::update_storage(&tag, text);
 
-    let chunk = Chunk::new(factory, "Storage".to_string(), tag).build();
+    let chunk = Chunk::new(factory.clone(), "Storage".to_string(), tag).build();
 
     let window = Wayland::new(chunk, margins, anchors, Layer::Bottom);
 
