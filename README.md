@@ -8,7 +8,7 @@ Uses GTK4 and GTK4 Layer Shell at its core, for ease of use with both X11 and Wa
 
 ```toml
 [dependencies]
-chunks-rs = "0.3.3"
+chunks-rs = "0.3.4"
 ```
 
 ```rs
