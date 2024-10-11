@@ -5,6 +5,7 @@ use gtk4::{
 
 pub fn tag(class_name: &str) -> Label {
     let tag = Label::new(None);
+
     tag.set_widget_name(class_name);
 
     tag
@@ -12,6 +13,7 @@ pub fn tag(class_name: &str) -> Label {
 
 pub fn load_css(style: &str) {
     let provider = CssProvider::new();
+
     provider.load_from_data(style);
 
     if let Some(display) = Display::default() {

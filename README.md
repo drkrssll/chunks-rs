@@ -34,7 +34,6 @@ fn main() {
 
     let chunks = |factory: Application| {
         storage(&factory);
-        clock(&factory);
 
         load_css(STYLE);
     };
