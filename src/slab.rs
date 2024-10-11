@@ -1,25 +1,28 @@
+use std::time::Duration;
+
+use gio::glib::{clone::Downgrade, timeout_add_local, ControlFlow};
 use gtk4::{prelude::GtkWindowExt, Application, ApplicationWindow, Label};
 use gtk4_layer_shell::{Edge, Layer};
 
 use crate::Wayland;
 
-pub struct Chunk {
+pub struct Slab {
     factory: Application,
     title: String,
     tag: Label,
     margins: Vec<(Edge, i32)>,
     anchors: Vec<(Edge, bool)>,
-    layer: Layer,
+    duration: u64,
 }
 
-impl Chunk {
+impl Slab {
     pub fn new(
         factory: Application,
         title: String,
         tag: Label,
         anchors: Vec<(Edge, bool)>,
         margins: Vec<(Edge, i32)>,
-        layer: Layer,
+        duration: u64,
     ) -> Self {
         Self {
             factory,
@@ -27,26 +30,36 @@ impl Chunk {
             tag,
             anchors,
             margins,
-            layer,
+            duration,
         }
     }
 
     pub fn build(self) {
-        let chunk = ApplicationWindow::builder()
+        let slab = ApplicationWindow::builder()
             .application(&self.factory)
             .title(self.title)
             .child(&self.tag)
             .build();
 
         if Wayland::detect_wayland() {
-            let wayland = Wayland::new(chunk.clone(), self.anchors, self.margins, self.layer);
+            let wayland = Wayland::new(slab.clone(), self.anchors, self.margins, Layer::Overlay);
 
             wayland.setup_window()
         }
 
-        chunk.set_decorated(false);
-        chunk.set_resizable(false);
+        slab.set_decorated(false);
+        slab.set_resizable(false);
 
-        chunk.present()
+        slab.present();
+
+        let duration = Duration::from_secs(self.duration);
+
+        let slab_weak = slab.downgrade();
+        timeout_add_local(duration, move || {
+            if let Some(window) = slab_weak.upgrade() {
+                window.destroy();
+            }
+            ControlFlow::Break
+        });
     }
 }

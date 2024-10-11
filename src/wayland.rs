@@ -8,7 +8,7 @@ use std::{
 };
 
 use gio::glib::{clone::Downgrade, timeout_add_local};
-use gtk4::{prelude::GtkWindowExt, prelude::WidgetExt, ApplicationWindow};
+use gtk4::{prelude::WidgetExt, ApplicationWindow};
 use gtk4_layer_shell::LayerShell;
 pub use gtk4_layer_shell::{Edge, Layer};
 
@@ -22,14 +22,14 @@ pub struct Wayland {
 impl Wayland {
     pub fn new(
         chunk: ApplicationWindow,
-        margins: Vec<(Edge, i32)>,
         anchors: Vec<(Edge, bool)>,
+        margins: Vec<(Edge, i32)>,
         layer: Layer,
     ) -> Self {
         Self {
             chunk,
-            margins,
             anchors,
+            margins,
             layer,
         }
     }
@@ -62,8 +62,6 @@ impl Wayland {
             }
             gio::glib::ControlFlow::Continue
         });
-
-        self.chunk.present()
     }
 
     pub fn detect_wayland() -> bool {

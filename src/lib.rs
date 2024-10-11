@@ -4,18 +4,17 @@ mod chunk;
 mod edge_conf;
 mod factory;
 mod internal;
+mod slab;
 mod utils;
 mod wayland;
-// mod x11;
 
 pub use chunk::Chunk;
 pub use edge_conf::EdgeConfig;
 pub use factory::Factory;
 pub use internal::Internal;
-pub use utils::load_css;
+pub use slab::Slab;
+pub use utils::*;
 pub use wayland::Wayland;
-// x11 support is currently broken
-// pub use x11::X11
 
 pub use chrono::Local;
 pub use gtk4::{Application, ApplicationWindow, Label};
