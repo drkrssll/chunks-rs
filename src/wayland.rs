@@ -1,4 +1,5 @@
 use std::{
+    collections::HashMap,
     env,
     io::{BufRead, BufReader, Write},
     os::unix::net::UnixStream,
@@ -47,7 +48,7 @@ impl Wayland {
         }
 
         let (window_sender, window_receiver) = channel::<bool>();
-        Wayland::hypr_ipc(window_sender);
+        Self::hypr_ipc(window_sender);
 
         let chunk = self.chunk.downgrade();
         timeout_add_local(Duration::from_millis(100), move || {
@@ -83,12 +84,32 @@ impl Wayland {
                 let _ = stream.write_all(b"subscribewindow\n");
 
                 let reader = BufReader::new(stream);
+                let mut fullscreen_status: HashMap<String, bool> = HashMap::new();
+                let mut current_workspace = String::new();
+
                 for line in reader.lines() {
                     if let Ok(event) = line {
-                        if event.contains("fullscreen>>1") {
-                            let _ = window_sender.send(true);
-                        } else if event.contains("fullscreen>>0") {
-                            let _ = window_sender.send(false);
+                        match () {
+                            _ if event.contains("fullscreen>>1") => {
+                                fullscreen_status.insert(current_workspace.clone(), true);
+                                let _ = window_sender.send(true);
+                            }
+                            _ if event.contains("fullscreen>>0") => {
+                                fullscreen_status.insert(current_workspace.clone(), false);
+                                let _ = window_sender.send(false);
+                            }
+                            _ if event.starts_with("workspace>>")
+                                || event.starts_with("workspacev2>>") =>
+                            {
+                                let workspace_name =
+                                    event.split(">>").nth(1).unwrap_or("").to_string();
+                                current_workspace = workspace_name.clone();
+
+                                let is_fullscreen =
+                                    *fullscreen_status.get(&current_workspace).unwrap_or(&false);
+                                let _ = window_sender.send(is_fullscreen);
+                            }
+                            _ => continue,
                         }
                     }
                 }
