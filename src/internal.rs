@@ -1,3 +1,5 @@
+use std::sync::{Arc, Mutex};
+
 use gio::glib::ControlFlow;
 use gtk4::{glib::timeout_add_seconds_local, Label};
 use sysinfo::{DiskExt, System, SystemExt};
@@ -25,6 +27,7 @@ impl Internal {
     {
         let css_tag = css_tag.clone();
         let css_updater = css_tag.clone();
+        let updated_fn = Arc::new(Mutex::new(updated_fn));
 
         let update = move || {
             let text = format_fn();
@@ -41,10 +44,12 @@ impl Internal {
         update();
 
         timeout_add_seconds_local(sleep, move || {
-            let updated_text = updated_fn();
             let css_updater = css_updater.clone();
+            let updated_fn = Arc::clone(&updated_fn);
 
             timeout_add_seconds_local(interval, move || {
+                let updated_text = (updated_fn.lock().unwrap())();
+
                 if updated_text.contains("</") && updated_text.contains('>') {
                     css_updater.set_markup(&updated_text);
                 } else {
