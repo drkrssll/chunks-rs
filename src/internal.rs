@@ -13,17 +13,21 @@ impl Internal {
         };
     }
 
-    pub fn static_to_update(
+    pub fn static_to_update<F>(
         css_tag: &Label,
-        text: String,
+        format_fn: F,
         sleep: u32,
-        updated_text: String,
+        updated_fn: F,
         interval: u32,
-    ) {
+    ) where
+        F: Fn() -> String + 'static,
+    {
         let css_tag = css_tag.clone();
         let css_updater = css_tag.clone();
 
         let update = move || {
+            let text = format_fn();
+
             if text.contains("</") && text.contains('>') {
                 css_tag.set_markup(&text);
             } else {
@@ -36,7 +40,7 @@ impl Internal {
         update();
 
         timeout_add_seconds_local(sleep, move || {
-            let updated_text = updated_text.clone();
+            let updated_text = updated_fn();
             let css_updater = css_updater.clone();
 
             timeout_add_seconds_local(interval, move || {
@@ -48,14 +52,20 @@ impl Internal {
 
                 ControlFlow::Continue
             });
+
             ControlFlow::Break
         });
     }
 
-    pub fn update_widget(css_tag: &Label, text: String, interval: u32) {
+    pub fn update_widget<F>(css_tag: &Label, format_fn: F, interval: u32)
+    where
+        F: Fn() -> String + 'static,
+    {
         let css_tag = css_tag.clone();
 
         let update = move || {
+            let text = format_fn();
+
             if text.contains("</") && text.contains('>') {
                 css_tag.set_markup(&text);
             } else {
@@ -70,12 +80,18 @@ impl Internal {
         timeout_add_seconds_local(interval, update);
     }
 
-    pub fn update_time(css_tag: &Label, text: String) {
-        Internal::update_widget(css_tag, text, 1)
+    pub fn update_time<F>(css_tag: &Label, format_fn: F)
+    where
+        F: Fn() -> String + 'static,
+    {
+        Internal::update_widget(css_tag, format_fn, 1)
     }
 
-    pub fn update_storage(css_tag: &Label, text: String) {
-        Internal::update_widget(css_tag, text, 120)
+    pub fn update_storage<F>(css_tag: &Label, format_fn: F)
+    where
+        F: Fn() -> String + 'static,
+    {
+        Internal::update_widget(css_tag, format_fn, 120)
     }
 
     pub fn get_storage() -> f64 {
