@@ -12,7 +12,7 @@ Chunks uses GTK4 and GTK4 Layer Shell at its core, and comes stock with a listen
 
 ```toml
 [dependencies]
-chunks-rs = "0.4.0"
+chunks-rs = "0.4.1"
 ```
 
 This will create a storage widget, similar to the one in the screenshot:
@@ -46,12 +46,15 @@ fn storage(factory: &Application) {
     let margins = vec![(Edge::Top, 20), (Edge::Right, 160)];
     let anchors = EdgeConfig::TOP_RIGHT.to_vec();
 
-    let text = format!(
-        "<span>{:.0}%</span>",
-        Internal::get_storage(),
-    );
+    let storage_closure = || {
+        let text = format!(
+            "<span foreground='#FFFFFF'>{:.0}%</span>",
+            Internal::get_storage(),
+        );
+        text
+    };
 
-    Internal::update_storage(&tag, text);
+    Internal::update_storage(&tag, storage_closure);
 
     Chunk::new(
         factory.clone(),

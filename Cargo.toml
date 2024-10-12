@@ -1,6 +1,6 @@
 [package]
 name = "chunks-rs"
-version = "0.4.0"
+version = "0.4.1"
 authors = ["Derek Russell russellderek01@gmail.com"]
 edition = "2021"
 
@@ -10,7 +10,7 @@ keywords = ["widget", "GUI", "widgets", "frontend", "toolkit"]
 
 description = "A library for making GTK4 widgets, inspired by Elkowar's Wacky Widgets."
 repository = "https://github.com/drkrssll/chunks-rs/"
-homepage = "https://github.com/drkrssll/chunks-rs/blob/main/README.md"
+homepage = "https://github.com/drkrssll/chunks-rs/"
 
 [dependencies]
 chrono = "0.4.38"
