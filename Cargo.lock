@@ -99,7 +99,7 @@ dependencies = [
 
 [[package]]
 name = "chunks-rs"
-version = "0.4.0"
+version = "0.4.1"
 dependencies = [
  "chrono",
  "gdk4-x11",

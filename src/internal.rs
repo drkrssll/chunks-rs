@@ -13,14 +13,15 @@ impl Internal {
         };
     }
 
-    pub fn static_to_update<F>(
+    pub fn static_to_update<F, G>(
         css_tag: &Label,
         format_fn: F,
         sleep: u32,
-        updated_fn: F,
+        updated_fn: G,
         interval: u32,
     ) where
         F: Fn() -> String + 'static,
+        G: Fn() -> String + 'static,
     {
         let css_tag = css_tag.clone();
         let css_updater = css_tag.clone();
