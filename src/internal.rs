@@ -1,4 +1,7 @@
-use std::sync::{Arc, Mutex};
+use std::{
+    process::Command,
+    sync::{Arc, Mutex},
+};
 
 use gio::glib::ControlFlow;
 use gtk4::{glib::timeout_add_seconds_local, Label};
@@ -13,6 +16,21 @@ impl Internal {
         } else {
             css_tag.set_text(&text);
         };
+    }
+
+    pub fn get_pactl_vol() -> String {
+        let output = Command::new("pactl")
+            .args(&["get-sink-volume", "@DEFAULT_SINK@"])
+            .output()
+            .expect("Failed to execute pactl command");
+
+        let output_str = String::from_utf8_lossy(&output.stdout);
+
+        if let Some(volume) = output_str.split_whitespace().find(|&s| s.ends_with('%')) {
+            volume.to_string()
+        } else {
+            "Unknown".to_string()
+        }
     }
 
     pub fn static_to_update<F, G>(
