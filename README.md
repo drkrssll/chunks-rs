@@ -12,7 +12,7 @@ Chunks uses GTK4 and GTK4 Layer Shell at its core, and comes stock with a listen
 
 ```toml
 [dependencies]
-chunks-rs = "0.4.4"
+chunks-rs = "0.4.5"
 ```
 
 This will create a storage widget, similar to the one in the screenshot:
