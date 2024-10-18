@@ -13,6 +13,10 @@ use gtk4::{prelude::WidgetExt, ApplicationWindow};
 use gtk4_layer_shell::LayerShell;
 pub use gtk4_layer_shell::{Edge, Layer};
 
+/// These don't necessarily NEED to be public, as they are already used before displaying the
+/// chunks, but maybe some of you will find them useful.
+///
+/// Handles Wayland-specific setup and communication for a GTK4 window.
 pub struct Wayland {
     chunk: ApplicationWindow,
     margins: Vec<(Edge, i32)>,

@@ -16,6 +16,7 @@ pub struct Slab {
 }
 
 impl Slab {
+    /// Creates a new `Slab` with the given parameters.
     pub fn new(
         factory: Application,
         title: String,
@@ -34,6 +35,7 @@ impl Slab {
         }
     }
 
+    /// Builds and displays the `Slab` window, which will close automatically after a set duration.
     pub fn build(self) {
         let slab = ApplicationWindow::builder()
             .application(&self.factory)

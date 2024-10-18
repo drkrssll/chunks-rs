@@ -1,5 +1,7 @@
 use gtk4_layer_shell::Edge;
 
+/// Configuration for positioning a window using gtk4_layer_shell's `Edge` anchors.
+/// Aims to simplify the process of positioning the window.
 #[derive(Debug, Clone, Copy)]
 pub struct EdgeConfig {
     left: (Edge, bool),
@@ -58,6 +60,8 @@ impl EdgeConfig {
         bottom: (Edge::Bottom, true),
     };
 
+    /// Converts the edge configuration into a vector of anchor tuples.
+    /// This is necessary for the Layer Shell.
     pub fn to_vec(&self) -> Vec<(Edge, bool)> {
         vec![self.left, self.right, self.top, self.bottom]
     }

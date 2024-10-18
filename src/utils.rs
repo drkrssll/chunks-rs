@@ -3,6 +3,7 @@ use gtk4::{
     STYLE_PROVIDER_PRIORITY_APPLICATION,
 };
 
+/// Creates a new GTK4 `Label` with a specified CSS class name.
 pub fn tag(class_name: &str) -> Label {
     let tag = Label::new(None);
 
@@ -11,6 +12,7 @@ pub fn tag(class_name: &str) -> Label {
     tag
 }
 
+/// Loads CSS style data into the GTK4 Application.
 pub fn load_css(style: &str) {
     let provider = CssProvider::new();
 

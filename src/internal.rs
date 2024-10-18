@@ -9,9 +9,11 @@ use gtk4::{glib::timeout_add_seconds_local, Label};
 use regex::Regex;
 use sysinfo::{DiskExt, System, SystemExt};
 
+/// Collection of internal utilities for your widgets, including widget state management and data fetching.
 pub struct Internal;
 
 impl Internal {
+    /// Sets the static text of a GTK4 label, using markup if the text contains HTML-like tags.
     pub fn static_widget(css_tag: &Label, text: String) {
         if text.contains("</") && text.contains('>') {
             css_tag.set_markup(&text);
