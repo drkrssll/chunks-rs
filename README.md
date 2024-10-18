@@ -3,7 +3,11 @@
 
 A library that simplifies the process of making widgets for Wayland Compositors.
 
-![Screenshot](screenshots/scrot1.jpg) ![Screenshot](screenshots/scrot3.jpg) ![Screenshot](screenshots/scrot4.jpg)
+<div style="display: flex; align-items: center;">
+    <img src="screenshots/scrot1.jpg" style="height: 200px;">
+    <img src="screenshots/scrot3.jpg" style="height: 200px;">
+    <img src="screenshots/scrot4.jpg" style="height: 200px;">
+</div>
 
 Chunks uses GTK4 and GTK4 Layer Shell at its core, and comes stock with a listener for the Hyprland IPC. This helps with changing Widget states when something changes, such as making the current window fullscreen.
 
