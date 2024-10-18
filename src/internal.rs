@@ -20,7 +20,7 @@ impl Internal {
         };
     }
 
-    async fn get_weather(location: &str) -> Result<String, Box<dyn Error>> {
+    pub async fn get_weather(location: &str) -> Result<String, Box<dyn Error>> {
         let url = format!("https://wttr.in/{}?format=3", location);
         let response = reqwest::get(&url).await?.text().await?;
 

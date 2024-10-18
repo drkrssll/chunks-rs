@@ -1,9 +1,9 @@
 # Chunks-rs
 [![Crates.io](https://img.shields.io/crates/d/chunks-rs?style=flat-square&color=red)](https://crates.io/crates/chunks-rs)
 
-![Screenshot](screenshot.jpg)
-
 A library that simplifies the process of making widgets for Wayland Compositors.
+
+![Screenshot](screenshot.jpg)
 
 Chunks uses GTK4 and GTK4 Layer Shell at its core, and comes stock with a listener for the Hyprland IPC. This helps with changing Widget states when something changes, such as making the current window fullscreen.
 
@@ -13,7 +13,7 @@ Chunks uses GTK4 and GTK4 Layer Shell at its core, and comes stock with a listen
 
 ```toml
 [dependencies]
-chunks-rs = "0.4.5"
+chunks-rs = "0.4.6"
 ```
 
 This will create a storage widget, similar to the one in the screenshot:
