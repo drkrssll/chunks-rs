@@ -73,4 +73,22 @@ fn storage(factory: &Application) {
 }
 ```
 
+## Slabs
 
+Chunks has recently had a new addition - Slabs. These are Popup Widgets, with almost the exact same implementation as Chunks.
+
+> Slabs do not need a designated layer, as they are set to Overlay by default.
+> Instead of a layer, enter the amount of seconds you would like the Popup to display for.
+```rs
+Slab::new(
+    factory.clone(),
+    "Volume".to_string(),
+    tag,
+    anchors,
+    margins,
+    2, // How long to display (In Seconds)
+)
+.build();
+```
+
+Slabs have very limited functionality as of right now.
