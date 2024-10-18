@@ -1,5 +1,6 @@
 # Chunks-rs
 [![Crates.io](https://img.shields.io/crates/d/chunks-rs?style=flat-square&color=red)](https://crates.io/crates/chunks-rs)
+
 ![Screenshot](screenshot.jpg)
 
 A library that simplifies the process of making widgets for Wayland Compositors.
