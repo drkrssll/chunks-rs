@@ -1,5 +1,5 @@
 # Chunks-rs
-![Crates.io](https://img.shields.io/crates/d/chunks-rs)
+[![Crates.io](https://img.shields.io/crates/d/chunks-rs)](https://crates.io/crates/chunks-rs)
 
 ![Screenshot](screenshot.jpg)
 
