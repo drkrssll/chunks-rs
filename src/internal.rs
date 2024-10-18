@@ -1,10 +1,12 @@
 use std::{
+    error::Error,
     process::Command,
     sync::{Arc, Mutex},
 };
 
 use gio::glib::ControlFlow;
 use gtk4::{glib::timeout_add_seconds_local, Label};
+use regex::Regex;
 use sysinfo::{DiskExt, System, SystemExt};
 
 pub struct Internal;
@@ -16,6 +18,22 @@ impl Internal {
         } else {
             css_tag.set_text(&text);
         };
+    }
+
+    async fn get_weather(location: &str) -> Result<String, Box<dyn Error>> {
+        let url = format!("https://wttr.in/{}?format=3", location);
+        let response = reqwest::get(&url).await?.text().await?;
+
+        let re = Regex::new(r"\s*([\d]+°F)")?;
+
+        if let Some(caps) = re.captures(&response) {
+            let emoji = caps.get(1).map_or("", |m| m.as_str());
+            let temperature = caps.get(2).map_or("", |m| m.as_str());
+
+            Ok(format!("{} {}", emoji, temperature).trim().to_string())
+        } else {
+            Ok("Weather data not available".to_string())
+        }
     }
 
     pub fn get_pactl_vol() -> String {
