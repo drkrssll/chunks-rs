@@ -13,6 +13,8 @@ Chunks uses GTK4 and GTK4 Layer Shell at its core, and comes stock with a listen
 
 ## Usage
 
+Make sure you have GTK4 and GTK4-Layer-Shell installed on your system.
+
 > For more in depth examples, please refer to [example-chunks](https://github.com/drkrssll/example-chunks)
 
 ```toml

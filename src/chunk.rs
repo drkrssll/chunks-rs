@@ -3,7 +3,7 @@ use gtk4_layer_shell::{Edge, Layer};
 
 use crate::Wayland;
 
-/// Represents a GTK4 window with aconfiguration for positioning/display on Wayland.
+/// Represents a GTK4 window with a configuration for positioning/display on Wayland.
 /// The tag represents a text box with a CSS class name for styling.
 pub struct Chunk {
     factory: Application,
