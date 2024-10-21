@@ -40,7 +40,7 @@ impl Internal {
 
     pub fn get_pactl_vol() -> String {
         let output = Command::new("pactl")
-            .args(&["get-sink-volume", "@DEFAULT_SINK@"])
+            .args(["get-sink-volume", "@DEFAULT_SINK@"])
             .output()
             .expect("Failed to execute pactl command");
 
@@ -149,9 +149,6 @@ impl Internal {
             .map(|disk| disk.available_space())
             .sum();
 
-        let used_percentage =
-            ((total_space - available_space) as f64 / total_space as f64 * 100.0).round();
-
-        used_percentage
+        ((total_space - available_space) as f64 / total_space as f64 * 100.0).round()
     }
 }

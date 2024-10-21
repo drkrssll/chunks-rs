@@ -1,7 +1,7 @@
 use std::{
     collections::HashMap,
     env,
-    io::{BufRead, BufReader, Write},
+    io::{BufRead, BufReader, Result, Write},
     os::unix::net::UnixStream,
     sync::mpsc::{channel, Sender},
     thread,
@@ -91,30 +91,27 @@ impl Wayland {
                 let mut fullscreen_status: HashMap<String, bool> = HashMap::new();
                 let mut current_workspace = String::new();
 
-                for line in reader.lines() {
-                    if let Ok(event) = line {
-                        match () {
-                            _ if event.contains("fullscreen>>1") => {
-                                fullscreen_status.insert(current_workspace.clone(), true);
-                                let _ = window_sender.send(true);
-                            }
-                            _ if event.contains("fullscreen>>0") => {
-                                fullscreen_status.insert(current_workspace.clone(), false);
-                                let _ = window_sender.send(false);
-                            }
-                            _ if event.starts_with("workspace>>")
-                                || event.starts_with("workspacev2>>") =>
-                            {
-                                let workspace_name =
-                                    event.split(">>").nth(1).unwrap_or("").to_string();
-                                current_workspace = workspace_name.clone();
-
-                                let is_fullscreen =
-                                    *fullscreen_status.get(&current_workspace).unwrap_or(&false);
-                                let _ = window_sender.send(is_fullscreen);
-                            }
-                            _ => continue,
+                for line in reader.lines().map_while(Result::ok) {
+                    match line {
+                        _ if line.contains("fullscreen>>1") => {
+                            fullscreen_status.insert(current_workspace.clone(), true);
+                            let _ = window_sender.send(true);
                         }
+                        _ if line.contains("fullscreen>>0") => {
+                            fullscreen_status.insert(current_workspace.clone(), false);
+                            let _ = window_sender.send(false);
+                        }
+                        _ if line.starts_with("workspace>>")
+                            || line.starts_with("workspacev2>>") =>
+                        {
+                            let workspace_name = line.split(">>").nth(1).unwrap_or("").to_string();
+                            current_workspace = workspace_name.clone();
+
+                            let is_fullscreen =
+                                *fullscreen_status.get(&current_workspace).unwrap_or(&false);
+                            let _ = window_sender.send(is_fullscreen);
+                        }
+                        _ => continue,
                     }
                 }
             }
