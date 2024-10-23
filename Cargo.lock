@@ -156,13 +156,14 @@ dependencies = [
 
 [[package]]
 name = "chunks-rs"
-version = "0.4.8"
+version = "0.5.0"
 dependencies = [
  "chrono",
  "gdk4-x11",
  "gio",
  "gtk4",
  "gtk4-layer-shell",
+ "once_cell",
  "regex",
  "reqwest",
  "sysinfo",

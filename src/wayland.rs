@@ -1,22 +1,25 @@
 use std::{
-    collections::HashMap,
+    collections::{HashMap, HashSet},
     env,
     io::{BufRead, BufReader, Result, Write},
     os::unix::net::UnixStream,
-    sync::mpsc::{channel, Sender},
+    sync::{
+        mpsc::{channel, Sender},
+        Arc, Mutex,
+    },
     thread,
     time::Duration,
 };
 
-use gio::glib::{clone::Downgrade, timeout_add_local};
-use gtk4::{prelude::WidgetExt, ApplicationWindow};
-use gtk4_layer_shell::LayerShell;
-pub use gtk4_layer_shell::{Edge, Layer};
+use gio::glib::{timeout_add_local, ControlFlow};
+use gtk4::{prelude::*, ApplicationWindow};
+use gtk4_layer_shell::{Edge, Layer, LayerShell};
+use once_cell::sync::Lazy;
 
-/// These don't necessarily NEED to be public, as they are already used before displaying the
-/// chunks, but maybe some of you will find them useful.
-///
-/// Handles Wayland-specific setup and communication for a GTK4 window.
+// Global filter storage
+static IGNORED_WINDOWS: Lazy<Arc<Mutex<HashSet<String>>>> =
+    Lazy::new(|| Arc::new(Mutex::new(HashSet::new())));
+
 pub struct Wayland {
     chunk: ApplicationWindow,
     margins: Vec<(Edge, i32)>,
@@ -39,33 +42,51 @@ impl Wayland {
         }
     }
 
+    /// Public function to add a window title to the ignore list
+    pub fn ipc_ignore_window(title: &str) {
+        if let Ok(mut ignored) = IGNORED_WINDOWS.lock() {
+            ignored.insert(title.to_string());
+        }
+    }
+
+    fn should_show_window(window: &ApplicationWindow) -> bool {
+        if let Ok(ignored) = IGNORED_WINDOWS.lock() {
+            if let Some(title) = window.title() {
+                return !ignored.contains(&title.to_string());
+            }
+        }
+        true
+    }
+
     pub fn setup_window(self) {
         self.chunk.init_layer_shell();
         self.chunk.set_layer(self.layer);
 
         for (edge, margin) in self.margins {
-            self.chunk.set_margin(edge, margin)
+            self.chunk.set_margin(edge, margin);
         }
 
         for (anchor, state) in self.anchors {
             self.chunk.set_anchor(anchor, state);
         }
 
-        let (window_sender, window_receiver) = channel::<bool>();
-        Self::hypr_ipc(window_sender);
+        let (sender, receiver) = channel::<bool>();
+        Self::hypr_ipc(sender);
 
         let chunk = self.chunk.downgrade();
         timeout_add_local(Duration::from_millis(100), move || {
-            if let Ok(is_fullscreen) = window_receiver.try_recv() {
+            if let Ok(is_fullscreen) = receiver.try_recv() {
                 if let Some(window) = chunk.upgrade() {
-                    if is_fullscreen {
-                        window.hide();
-                    } else {
-                        window.show();
+                    if Self::should_show_window(&window) {
+                        if is_fullscreen {
+                            window.hide();
+                        } else {
+                            window.show();
+                        }
                     }
                 }
             }
-            gio::glib::ControlFlow::Continue
+            ControlFlow::Continue
         });
     }
 
@@ -77,7 +98,7 @@ impl Wayland {
             || (!wayland_display.is_empty() && !session_type.contains("x11"))
     }
 
-    pub fn hypr_ipc(window_sender: Sender<bool>) {
+    fn hypr_ipc(window_sender: Sender<bool>) {
         let instance_signature = env::var("HYPRLAND_INSTANCE_SIGNATURE")
             .expect("HYPRLAND_INSTANCE_SIGNATURE not found. Is Hyprland running?");
 
