@@ -75,12 +75,18 @@ fn storage(factory: &Application) {
 }
 ```
 
-## Slabs
+## Slabs & Plates
 
-Chunks has recently had a new addition - Slabs. These are Popup Widgets, with almost the exact same implementation as Chunks.
+Chunks has recently had two new window type additions - Slabs & Plates. These are Popup Widgets, with almost the exact same implementation as Chunks.
 
-> Slabs do not need a designated layer, as they are set to Overlay by default.
-> Instead of a layer, enter the amount of seconds you would like the Popup to display for.
+Slabs & Plates have the exact same implementations, but they have different behaviors.
+
+Slabs are meant to display whenever a change in the underlying text is detected. This is handy for standard Popups, like for volume detection.
+
+Plates, on the other hand, display once whenever your Factory is initiated, and is destroyed after a set duration. These are more suited for Greeter Popups.
+
+> These widget types do not need a designated layer, as they are set to Overlay by default.
+> Instead of a layer, enter the amount of seconds you would like the Popups to display for.
 ```rs
 Slab::new(
     factory.clone(),
@@ -88,7 +94,19 @@ Slab::new(
     tag,
     anchors,
     margins,
-    2, // How long to display (In Seconds)
+    2,
+)
+.build();
+```
+
+```rs
+Plate::new(
+    factory.clone(),
+    "Volume".to_string(),
+    tag,
+    anchors,
+    margins,
+    2,
 )
 .build();
 ```
