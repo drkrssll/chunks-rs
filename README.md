@@ -19,7 +19,7 @@ Make sure you have GTK4 and GTK4-Layer-Shell installed on your system.
 
 ```toml
 [dependencies]
-chunks-rs = "0.4.8"
+chunks-rs = "0.5.0"
 ```
 
 This will create a storage widget, similar to the one in the screenshot:
@@ -77,13 +77,13 @@ fn storage(factory: &Application) {
 
 ## Slabs & Plates
 
-Chunks has recently had two new window type additions - Slabs & Plates. These are Popup Widgets, with almost the exact same implementation as Chunks.
+Chunks has recently had two new window type additions - Slabs & Plates. These are Popup Widgets, with similar implementations to Chunks.
 
-Slabs & Plates have the exact same implementations, but they have different behaviors.
+Slabs & Plates have the exact same implementations, but have different behaviors.
 
-Slabs are meant to display whenever a change in the underlying text is detected. This is handy for standard Popups, like for volume detection.
+Slabs will display whenever a change in the underlying text is detected. This is handy for standard Popups, like for volume detection.
 
-Plates, on the other hand, display once whenever your Factory is initiated, and is destroyed after a set duration. These are more suited for Greeter Popups.
+Plates, on the other hand, display only once - whenever your Factory is initiated, and are destroyed after a set duration. These are more suited for greeter Popups.
 
 > These widget types do not need a designated layer, as they are set to Overlay by default.
 > Instead of a layer, enter the amount of seconds you would like the Popups to display for.
@@ -102,7 +102,7 @@ Slab::new(
 ```rs
 Plate::new(
     factory.clone(),
-    "Volume".to_string(),
+    "Greeter".to_string(),
     tag,
     anchors,
     margins,
@@ -110,5 +110,3 @@ Plate::new(
 )
 .build();
 ```
-
-Slabs have very limited functionality as of right now.
