@@ -54,23 +54,19 @@ impl Slab {
         slab.set_decorated(false);
         slab.set_resizable(false);
 
-        slab.present();
+        // Don't show initially - wait for first text update
+        slab.hide();
 
         let duration = Duration::from_secs(self.duration);
         let slab_weak = slab.downgrade();
 
-        let window_weak = slab_weak.clone();
-        timeout_add_local(duration.clone(), move || {
-            if let Some(window) = window_weak.upgrade() {
-                window.hide();
-            }
-            ControlFlow::Break
-        });
-
+        // Connect to label's notify signal for text changes
         self.tag
             .connect_notify_local(Some("label"), move |_label, _| {
                 if let Some(window) = slab_weak.upgrade() {
+                    // Show window immediately
                     window.present();
+                    window.set_visible(true);
 
                     let window_weak = window.downgrade();
                     timeout_add_local(duration, move || {
