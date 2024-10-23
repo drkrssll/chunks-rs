@@ -105,7 +105,7 @@ impl Wayland {
                             || line.starts_with("workspacev2>>") =>
                         {
                             let workspace_name = line.split(">>").nth(1).unwrap_or("").to_string();
-                            current_workspace = workspace_name.clone();
+                            current_workspace.clone_from(&workspace_name);
 
                             let is_fullscreen =
                                 *fullscreen_status.get(&current_workspace).unwrap_or(&false);
