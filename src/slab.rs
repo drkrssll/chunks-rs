@@ -42,7 +42,7 @@ impl Slab {
     pub fn build(self) {
         let slab = ApplicationWindow::builder()
             .application(&self.factory)
-            .title(self.title)
+            .title(self.title.clone())
             .child(&self.tag)
             .build();
 
@@ -55,6 +55,8 @@ impl Slab {
         slab.set_resizable(false);
 
         slab.hide();
+
+        Wayland::ipc_ignore_window(&self.title);
 
         let duration = Duration::from_secs(self.duration);
         let slab_weak = slab.downgrade();
