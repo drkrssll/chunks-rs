@@ -1,11 +1,20 @@
 use gtk4::{
-    gdk::Display, prelude::WidgetExt, style_context_add_provider_for_display, CssProvider, Label,
-    STYLE_PROVIDER_PRIORITY_APPLICATION,
+    gdk::Display, prelude::WidgetExt, style_context_add_provider_for_display, Box, CssProvider,
+    Label, Orientation, STYLE_PROVIDER_PRIORITY_APPLICATION,
 };
 
 /// Creates a new GTK4 `Label` with a specified CSS class name.
 pub fn tag(class_name: &str) -> Label {
     let tag = Label::new(None);
+
+    tag.set_widget_name(class_name);
+
+    tag
+}
+
+/// Creates a new GTK4 `Box` with a specified CSS class name.
+pub fn tag_box(class_name: &str) -> Box {
+    let tag = Box::new(Orientation::Vertical, 0);
 
     tag.set_widget_name(class_name);
 

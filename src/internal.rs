@@ -5,7 +5,7 @@ use std::{
 };
 
 use gio::glib::ControlFlow;
-use gtk4::{glib::timeout_add_seconds_local, Label};
+use gtk4::{glib::timeout_add_seconds_local, prelude::BoxExt, Box as GtkBox, Label, Picture};
 use regex::Regex;
 use sysinfo::{DiskExt, System, SystemExt};
 
@@ -22,13 +22,21 @@ impl Internal {
         };
     }
 
+    /// Adds a picture to a GTK4 box, given a file path.
+    pub fn static_picture(box_tag: &GtkBox, pathname: &str) {
+        let picture = Picture::for_filename(pathname);
+
+        box_tag.append(&picture);
+    }
+
+    /// Fetches the weather for a given location using the wttr.in API.
     pub async fn get_weather(location: &str) -> Result<String, Box<dyn Error>> {
         let url = format!("https://wttr.in/{}?format=3", location);
         let response = reqwest::get(&url).await?.text().await?;
 
-        let re = Regex::new(r"\s*([\d]+°F)")?;
+        let regex = Regex::new(r"\s*([\d]+°F)")?;
 
-        if let Some(caps) = re.captures(&response) {
+        if let Some(caps) = regex.captures(&response) {
             let emoji = caps.get(1).map_or("", |m| m.as_str());
             let temperature = caps.get(2).map_or("", |m| m.as_str());
 
@@ -38,6 +46,7 @@ impl Internal {
         }
     }
 
+    /// Fetches the current volume level using the `pactl` command.
     pub fn get_pactl_vol() -> String {
         let output = Command::new("pactl")
             .args(["get-sink-volume", "@DEFAULT_SINK@"])
@@ -53,6 +62,7 @@ impl Internal {
         }
     }
 
+    /// Sets static text and then updates it at a given interval using a closure.
     pub fn static_to_update<F, G>(
         css_tag: &Label,
         format_fn: F,
@@ -101,6 +111,7 @@ impl Internal {
         });
     }
 
+    /// Updates a GTK4 label using a closure at a given interval.
     pub fn update_widget<F>(css_tag: &Label, format_fn: F, interval: u32)
     where
         F: Fn() -> String + 'static,
@@ -124,6 +135,7 @@ impl Internal {
         timeout_add_seconds_local(interval, update);
     }
 
+    /// Updates the time in a GTK4 label every second given a closure.
     pub fn update_time<F>(css_tag: &Label, format_fn: F)
     where
         F: Fn() -> String + 'static,
@@ -131,6 +143,7 @@ impl Internal {
         Internal::update_widget(css_tag, format_fn, 1)
     }
 
+    /// Updates the storage in a GTK4 label every 2 minutes given a closure.
     pub fn update_storage<F>(css_tag: &Label, format_fn: F)
     where
         F: Fn() -> String + 'static,
@@ -138,6 +151,7 @@ impl Internal {
         Internal::update_widget(css_tag, format_fn, 120)
     }
 
+    /// Fetches the current storage usage as a percentage.
     pub fn get_storage() -> f64 {
         let mut system = System::new_all();
         system.refresh_disks();
