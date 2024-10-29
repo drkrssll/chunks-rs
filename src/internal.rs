@@ -5,7 +5,10 @@ use std::{
 };
 
 use gio::glib::ControlFlow;
-use gtk4::{glib::timeout_add_seconds_local, prelude::BoxExt, Box as GtkBox, Label, Picture};
+use gtk4::{
+    glib::timeout_add_seconds_local, prelude::BoxExt, prelude::WidgetExt, Box as GtkBox, Label,
+    Picture,
+};
 use regex::Regex;
 use sysinfo::{DiskExt, System, SystemExt};
 
@@ -30,6 +33,10 @@ impl Internal {
     pub fn static_picture(tag: &Tag, pathname: &str) {
         if let Tag::Box(box_tag) = tag {
             let picture = Picture::for_filename(pathname);
+
+            picture.set_hexpand(true);
+            picture.set_vexpand(true);
+
             box_tag.append(&picture);
         }
     }
