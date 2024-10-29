@@ -15,10 +15,8 @@ pub fn tag(class_name: &str) -> Tag {
 }
 
 /// Creates a new GTK4 `Box` with a specified CSS class name.
-pub fn tag_box(class_name: &str, width: i32, height: i32) -> Tag {
+pub fn tag_box(class_name: &str) -> Tag {
     let tag = Box::new(Orientation::Vertical, 0);
-
-    tag.set_size_request(width, height);
 
     tag.set_widget_name(class_name);
 

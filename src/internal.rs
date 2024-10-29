@@ -34,9 +34,6 @@ impl Internal {
         if let Tag::Box(box_tag) = tag {
             let picture = Picture::for_filename(pathname);
 
-            picture.set_hexpand(true);
-            picture.set_vexpand(true);
-
             box_tag.append(&picture);
         }
     }
