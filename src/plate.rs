@@ -24,16 +24,16 @@ impl Plate {
         factory: Application,
         title: String,
         tag: Tag,
-        anchors: Vec<(Edge, bool)>,
         margins: Vec<(Edge, i32)>,
+        anchors: Vec<(Edge, bool)>,
         duration: u64,
     ) -> Self {
         Self {
             factory,
             title,
             tag,
-            anchors,
             margins,
+            anchors,
             duration,
         }
     }
