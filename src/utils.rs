@@ -3,22 +3,24 @@ use gtk4::{
     Label, Orientation, STYLE_PROVIDER_PRIORITY_APPLICATION,
 };
 
+use crate::chunk::Tag;
+
 /// Creates a new GTK4 `Label` with a specified CSS class name.
-pub fn tag(class_name: &str) -> Label {
+pub fn tag(class_name: &str) -> Tag {
     let tag = Label::new(None);
 
     tag.set_widget_name(class_name);
 
-    tag
+    Tag::Label(tag)
 }
 
 /// Creates a new GTK4 `Box` with a specified CSS class name.
-pub fn tag_box(class_name: &str) -> Box {
+pub fn tag_box(class_name: &str) -> Tag {
     let tag = Box::new(Orientation::Vertical, 0);
 
     tag.set_widget_name(class_name);
 
-    tag
+    Tag::Box(tag)
 }
 
 /// Loads CSS style data into the GTK4 Application.
