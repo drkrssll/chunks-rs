@@ -27,16 +27,16 @@ impl Chunk {
         factory: Application,
         title: String,
         tag: Tag,
-        anchors: Vec<(Edge, bool)>,
         margins: Vec<(Edge, i32)>,
+        anchors: Vec<(Edge, bool)>,
         layer: Layer,
     ) -> Self {
         Self {
             factory,
             title,
             tag,
-            anchors,
             margins,
+            anchors,
             layer,
         }
     }
