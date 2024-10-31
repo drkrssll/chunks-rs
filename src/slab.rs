@@ -1,7 +1,7 @@
 use std::time::Duration;
 
 use gio::{
-    glib::{timeout_add_local, ControlFlow},
+    glib::{ffi::g_main_context_default, timeout_add_local, ControlFlow, MainContext},
     prelude::{Cast, ObjectExt},
 };
 use gtk4::{
@@ -74,10 +74,14 @@ impl Slab {
                 window.present();
                 window.set_visible(true);
 
+                while MainContext::default().iteration(false) {}
+
                 let window_weak = window.downgrade();
                 timeout_add_local(duration, move || {
                     if let Some(window) = window_weak.upgrade() {
                         window.hide();
+
+                        while MainContext::default().iteration(false) {}
                     }
                     ControlFlow::Break
                 });
