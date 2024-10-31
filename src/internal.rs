@@ -63,7 +63,12 @@ impl Internal {
         let devices = handler.list_devices().expect("Failed to list devices");
 
         if let Some(device) = devices.first() {
-            return device.volume.to_string();
+            let vol = device.volume.to_string();
+
+            vol.split_whitespace()
+                .find(|s| s.ends_with('%'))
+                .unwrap_or("0%")
+                .to_string()
         } else {
             "Unknown".to_string()
         }
