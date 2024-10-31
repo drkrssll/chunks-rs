@@ -74,23 +74,6 @@ impl Internal {
         }
     }
 
-    /// Fetches the current volume level using the `pactl` command.
-    // pub fn get_pactl_vol() -> String {
-
-    //     let output = Command::new("pactl")
-    //         .args(["get-sink-volume", "@DEFAULT_SINK@"])
-    //         .output()
-    //         .expect("Failed to execute pactl command");
-
-    //     let output_str = String::from_utf8_lossy(&output.stdout);
-
-    //     if let Some(volume) = output_str.split_whitespace().find(|&s| s.ends_with('%')) {
-    //         volume.to_string()
-    //     } else {
-    //         "Unknown".to_string()
-    //     }
-    // }
-
     /// Sets static text and then updates it at a given interval using a closure.
     pub fn static_to_update<F, G>(tag: &Tag, format_fn: F, sleep: u32, updated_fn: G, interval: u32)
     where
