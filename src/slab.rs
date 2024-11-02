@@ -1,12 +1,12 @@
 use std::time::Duration;
 
 use gio::{
-    glib::{ffi::g_main_context_default, timeout_add_local, ControlFlow, MainContext},
+    glib::{timeout_add_local, ControlFlow, MainContext},
     prelude::{Cast, ObjectExt},
 };
 use gtk4::{
     prelude::{GtkWindowExt, WidgetExt},
-    Application, ApplicationWindow, Label, Widget,
+    Application, ApplicationWindow, Widget,
 };
 use gtk4_layer_shell::{Edge, Layer};
 
@@ -23,6 +23,7 @@ pub struct Slab {
 
 impl Slab {
     /// Creates a new `Slab` with the given parameters.
+    #[must_use]
     pub fn new(
         factory: Application,
         title: String,
@@ -42,6 +43,7 @@ impl Slab {
     }
 
     /// Builds and displays the `Slab` window, which will show whenever the text changes.
+    #[must_use]
     pub fn build(self) {
         let child = match self.tag {
             Tag::Label(label) => label.upcast::<Widget>(),

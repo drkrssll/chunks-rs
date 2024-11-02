@@ -23,6 +23,7 @@ pub struct Chunk {
 /// Implementation of the `Chunk` struct.
 impl Chunk {
     /// Creates a new `Chunk` instance with the given parameters.
+    #[must_use]
     pub fn new(
         factory: Application,
         title: String,
@@ -42,6 +43,7 @@ impl Chunk {
     }
 
     /// Builds and displays the `Chunk` window, configuring it for Wayland if detected.
+    #[must_use]
     pub fn build(self) {
         let child = match self.tag {
             Tag::Label(label) => label.upcast::<Widget>(),

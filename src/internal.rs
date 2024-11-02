@@ -1,14 +1,10 @@
 use std::{
     error::Error,
-    process::Command,
     sync::{Arc, Mutex},
 };
 
 use gio::glib::ControlFlow;
-use gtk4::{
-    glib::timeout_add_seconds_local, prelude::BoxExt, prelude::WidgetExt, Box as GtkBox, Label,
-    Picture,
-};
+use gtk4::{glib::timeout_add_seconds_local, prelude::BoxExt, Picture};
 use pulsectl::controllers::{DeviceControl, SinkController};
 use regex::Regex;
 use sysinfo::{DiskExt, System, SystemExt};

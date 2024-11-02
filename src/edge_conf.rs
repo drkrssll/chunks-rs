@@ -62,6 +62,7 @@ impl EdgeConfig {
 
     /// Converts the edge configuration into a vector of anchor tuples.
     /// This is necessary for the Layer Shell.
+    #[must_use]
     pub fn to_vec(&self) -> Vec<(Edge, bool)> {
         vec![self.left, self.right, self.top, self.bottom]
     }

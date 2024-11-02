@@ -4,7 +4,7 @@ use gio::{
     glib::{clone::Downgrade, timeout_add_local, ControlFlow},
     prelude::Cast,
 };
-use gtk4::{prelude::GtkWindowExt, Application, ApplicationWindow, Label, Widget};
+use gtk4::{prelude::GtkWindowExt, Application, ApplicationWindow, Widget};
 use gtk4_layer_shell::{Edge, Layer};
 
 use crate::{chunk::Tag, Wayland};
@@ -20,6 +20,7 @@ pub struct Plate {
 
 impl Plate {
     /// Creates a new `Plate` with the given parameters.
+    #[must_use]
     pub fn new(
         factory: Application,
         title: String,
@@ -40,6 +41,7 @@ impl Plate {
 
     /// Builds and displays the `Plate` window, which will close automatically after a set duration.
     /// Perfect for greeter widgets.
+    #[must_use]
     pub fn build(self) {
         let child = match self.tag {
             Tag::Label(label) => label.upcast::<Widget>(),
