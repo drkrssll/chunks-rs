@@ -24,4 +24,3 @@ pulsectl-rs = "0.3.2"
 regex = "1.11.0"
 reqwest = { version = "0.12.8", features = ["blocking"] }
 sysinfo = "0.29.3"
-x11 = { version = "2.19", features = ["xlib"] }

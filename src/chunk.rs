@@ -1,8 +1,8 @@
+use crate::Wayland;
+
 use gio::prelude::Cast;
 use gtk4::{prelude::GtkWindowExt, Application, ApplicationWindow, Box, Label, Widget};
 use gtk4_layer_shell::{Edge, Layer};
-
-use crate::Wayland;
 
 pub enum Tag {
     Label(Label),

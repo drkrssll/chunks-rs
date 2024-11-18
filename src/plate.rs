@@ -1,3 +1,5 @@
+use crate::{chunk::Tag, Wayland};
+
 use std::time::Duration;
 
 use gio::{
@@ -6,8 +8,6 @@ use gio::{
 };
 use gtk4::{prelude::GtkWindowExt, Application, ApplicationWindow, Widget};
 use gtk4_layer_shell::{Edge, Layer};
-
-use crate::{chunk::Tag, Wayland};
 
 pub struct Plate {
     factory: Application,

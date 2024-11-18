@@ -1,9 +1,9 @@
+use crate::chunk::Tag;
+
 use gtk4::{
     gdk::Display, prelude::WidgetExt, style_context_add_provider_for_display, Box, CssProvider,
     Label, Orientation, STYLE_PROVIDER_PRIORITY_APPLICATION,
 };
-
-use crate::chunk::Tag;
 
 /// Creates a new GTK4 `Label` with a specified CSS class name.
 pub fn tag(class_name: &str) -> Tag {
