@@ -1,4 +1,5 @@
-use crate::{chunk::Tag, Wayland};
+use std::time::Duration;
+
 use gio::{
     glib::{timeout_add_local, ControlFlow, MainContext},
     prelude::{Cast, ObjectExt},
@@ -8,7 +9,8 @@ use gtk4::{
     Application, ApplicationWindow, Widget,
 };
 use gtk4_layer_shell::{Edge, Layer};
-use std::time::Duration;
+
+use crate::{chunk::Tag, Wayland};
 
 pub struct Slab {
     factory: Application,
@@ -20,6 +22,7 @@ pub struct Slab {
 }
 
 impl Slab {
+    /// Creates a new `Slab` with the given parameters.
     #[must_use]
     pub fn new(
         factory: Application,
@@ -39,26 +42,7 @@ impl Slab {
         }
     }
 
-    fn process_events(depth: u32, max_depth: u32) {
-        if depth >= max_depth {
-            return;
-        }
-
-        if MainContext::default().iteration(false) {
-            Self::process_events(depth + 1, max_depth);
-        }
-    }
-
-    fn handle_visibility(window: &ApplicationWindow, visible: bool) {
-        if visible {
-            window.present();
-            window.set_visible(true);
-        } else {
-            window.hide();
-        }
-        Self::process_events(0, 10);
-    }
-
+    /// Builds and displays the `Slab` window, which will show whenever the text changes.
     #[must_use]
     pub fn build(self) {
         let child = match self.tag {
@@ -79,6 +63,7 @@ impl Slab {
 
         slab.set_decorated(false);
         slab.set_resizable(false);
+
         slab.hide();
 
         Wayland::ipc_ignore_window(&self.title);
@@ -88,12 +73,17 @@ impl Slab {
 
         child.connect_notify_local(Some("label"), move |_label, _| {
             if let Some(window) = slab_weak.upgrade() {
-                Self::handle_visibility(&window, true);
+                window.present();
+                window.set_visible(true);
+
+                while MainContext::default().iteration(false) {}
 
                 let window_weak = window.downgrade();
                 timeout_add_local(duration, move || {
                     if let Some(window) = window_weak.upgrade() {
-                        Self::handle_visibility(&window, false);
+                        window.hide();
+
+                        while MainContext::default().iteration(false) {}
                     }
                     ControlFlow::Break
                 });
