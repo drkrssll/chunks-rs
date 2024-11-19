@@ -20,7 +20,6 @@ pub struct Plate {
 
 impl Plate {
     /// Creates a new `Plate` with the given parameters.
-    #[must_use]
     pub fn new(
         factory: Application,
         title: String,
@@ -41,7 +40,6 @@ impl Plate {
 
     /// Builds and displays the `Plate` window, which will close automatically after a set duration.
     /// Perfect for greeter widgets.
-    #[must_use]
     pub fn build(self) {
         let child = match self.tag {
             Tag::Label(label) => label.upcast::<Widget>(),

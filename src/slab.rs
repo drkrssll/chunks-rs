@@ -23,7 +23,6 @@ pub struct Slab {
 
 impl Slab {
     /// Creates a new `Slab` with the given parameters.
-    #[must_use]
     pub fn new(
         factory: Application,
         title: String,
@@ -63,7 +62,6 @@ impl Slab {
     }
 
     /// Builds and displays the `Slab` window, which will show whenever the text changes.
-    #[must_use]
     pub fn build(self) {
         let child = match self.tag {
             Tag::Label(label) => label.upcast::<Widget>(),

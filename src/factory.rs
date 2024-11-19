@@ -11,7 +11,6 @@ pub struct Factory {
 
 impl Factory {
     /// Creates a new `Factory` with the given application ID.
-    #[must_use]
     pub fn new(id: &str) -> Self {
         let application = Application::builder().application_id(id).build();
 
@@ -19,7 +18,6 @@ impl Factory {
     }
 
     /// Runs the application.
-    #[must_use]
     pub fn pollute(self, chunks: impl Fn(Application) + 'static) -> ExitCode {
         self.application.connect_activate(move |app| {
             chunks(app.clone());
