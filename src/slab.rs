@@ -42,6 +42,26 @@ impl Slab {
         }
     }
 
+    fn process_events(depth: u32, max_depth: u32) {
+        if depth >= max_depth {
+            return;
+        }
+
+        if MainContext::default().iteration(false) {
+            Self::process_events(depth + 1, max_depth);
+        }
+    }
+
+    fn handle_visibility(window: &ApplicationWindow, visible: bool) {
+        if visible {
+            window.present();
+            window.set_visible(true);
+        } else {
+            window.hide();
+        }
+        Self::process_events(0, 10);
+    }
+
     /// Builds and displays the `Slab` window, which will show whenever the text changes.
     #[must_use]
     pub fn build(self) {
@@ -63,7 +83,6 @@ impl Slab {
 
         slab.set_decorated(false);
         slab.set_resizable(false);
-
         slab.hide();
 
         Wayland::ipc_ignore_window(&self.title);
@@ -73,17 +92,12 @@ impl Slab {
 
         child.connect_notify_local(Some("label"), move |_label, _| {
             if let Some(window) = slab_weak.upgrade() {
-                window.present();
-                window.set_visible(true);
-
-                while MainContext::default().iteration(false) {}
+                Self::handle_visibility(&window, true);
 
                 let window_weak = window.downgrade();
                 timeout_add_local(duration, move || {
                     if let Some(window) = window_weak.upgrade() {
-                        window.hide();
-
-                        while MainContext::default().iteration(false) {}
+                        Self::handle_visibility(&window, false);
                     }
                     ControlFlow::Break
                 });
