@@ -1,4 +1,4 @@
-use crate::chunk::Tag;
+use crate::widgets::Tag;
 
 use gtk4::{
     gdk::Display, prelude::WidgetExt, style_context_add_provider_for_display, Box, CssProvider,

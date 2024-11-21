@@ -10,7 +10,7 @@ use gtk4::{
 };
 use gtk4_layer_shell::{Edge, Layer};
 
-use crate::{chunk::Tag, Wayland};
+use crate::{widgets::Tag, Wayland};
 
 pub struct Slab {
     factory: Application,

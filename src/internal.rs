@@ -9,7 +9,7 @@ use pulsectl::controllers::{DeviceControl, SinkController};
 use regex::Regex;
 use sysinfo::{DiskExt, System, SystemExt};
 
-use crate::chunk::Tag;
+use crate::widgets::Tag;
 
 /// Collection of internal utilities for your widgets, including widget state management and data fetching.
 pub struct Internal;

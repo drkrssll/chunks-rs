@@ -1,4 +1,4 @@
-use crate::{chunk::Tag, Wayland};
+use crate::{widgets::Tag, Wayland};
 
 use std::time::Duration;
 
