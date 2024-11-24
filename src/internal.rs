@@ -4,7 +4,11 @@ use std::{
 };
 
 use gio::glib::ControlFlow;
-use gtk4::{glib::timeout_add_seconds_local, prelude::BoxExt, Picture};
+use gtk4::{
+    glib::timeout_add_seconds_local,
+    prelude::{BoxExt, ButtonExt},
+    Picture,
+};
 use pulsectl::controllers::{DeviceControl, SinkController};
 use regex::Regex;
 use sysinfo::{DiskExt, System, SystemExt};
@@ -15,14 +19,20 @@ use crate::widgets::Tag;
 pub struct Internal;
 
 impl Internal {
-    /// Sets the static text of a Widget, using markup if the text contains HTML-like tags.
+    /// Sets the static text of a Tag, using markup if the text contains HTML-like tags.
     pub fn static_widget(tag: &Tag, text: String) {
-        if let Tag::Label(label) = tag {
-            if text.contains("</") && text.contains('>') {
-                label.set_markup(&text);
-            } else {
-                label.set_text(&text);
+        match tag {
+            Tag::Label(label) => {
+                if text.contains("</") && text.contains('>') {
+                    label.set_markup(&text);
+                } else {
+                    label.set_text(&text);
+                }
             }
+            Tag::Button(button) => {
+                button.set_label(&text);
+            }
+            _ => (),
         }
     }
 

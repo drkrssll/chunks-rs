@@ -6,7 +6,7 @@ use gtk4::{
 };
 
 /// Creates a new GTK4 `Label` with a specified CSS class name.
-pub fn tag(class_name: &str) -> Tag {
+pub fn tag_label(class_name: &str) -> Tag {
     let tag = Label::new(None);
 
     tag.set_widget_name(class_name);
@@ -21,6 +21,15 @@ pub fn tag_box(class_name: &str) -> Tag {
     tag.set_widget_name(class_name);
 
     Tag::Box(tag)
+}
+
+/// Creates a new GTK4 `Button` with a specified CSS class name.
+pub fn tag_button(class_name: &str) -> Tag {
+    let tag = gtk4::Button::new();
+
+    tag.set_widget_name(class_name);
+
+    Tag::Button(tag)
 }
 
 /// Loads CSS style data into the GTK4 Application.

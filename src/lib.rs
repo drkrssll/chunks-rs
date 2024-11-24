@@ -5,6 +5,7 @@ mod internal;
 mod wayland;
 
 pub mod position;
+pub mod taskbar;
 pub mod utils;
 pub mod widgets;
 

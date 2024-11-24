@@ -162,7 +162,7 @@ dependencies = [
 
 [[package]]
 name = "chunks-rs"
-version = "0.5.2"
+version = "0.6.0"
 dependencies = [
  "chrono",
  "gdk-pixbuf",

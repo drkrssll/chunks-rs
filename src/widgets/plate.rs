@@ -44,6 +44,7 @@ impl Plate {
         let child = match self.tag {
             Tag::Label(label) => label.upcast::<Widget>(),
             Tag::Box(box_) => box_.upcast::<Widget>(),
+            Tag::Button(button) => button.upcast::<Widget>(),
         };
 
         let plate = ApplicationWindow::builder()

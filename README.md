@@ -79,8 +79,8 @@ fn storage(factory: &Application) {
 
 Chunks recently introduced two new popup widget types: Slabs and Plates.
 
-    Slabs: Display dynamically, triggered by changes in underlying text (e.g., volume detection).
-    Plates: Display once at startup, then disappear after a set duration (e.g., welcome messages).
+- Slabs: Display dynamically, triggered by changes in underlying text (e.g., volume detection).
+- Plates: Display once at startup, then disappear after a set duration (e.g., welcome messages).
 
 Both share similar implementations but differ in their display behavior.
 
