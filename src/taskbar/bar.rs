@@ -65,6 +65,7 @@ impl Bar {
 
         bar.init_layer_shell();
         bar.set_layer(Layer::Top);
+        bar.auto_exclusive_zone_enable();
 
         for (edge, margin) in &self.margins {
             bar.set_margin(*edge, *margin);
