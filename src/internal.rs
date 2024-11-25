@@ -47,7 +47,7 @@ impl Internal {
 
     /// Sets Button behavior
     pub fn static_button(tag_button: &Tag, action: impl Fn() + 'static) {
-        if let Tag::Button(button) = button {
+        if let Tag::Button(button) = tag_button {
             button.connect_clicked(move |_| {
                 action();
             });
