@@ -37,11 +37,20 @@ impl Internal {
     }
 
     /// Adds a picture to a GTK4 box, given a file path.
-    pub fn static_picture(tag: &Tag, pathname: &str) {
-        if let Tag::Box(box_tag) = tag {
+    pub fn static_picture(tag_box: &Tag, pathname: &str) {
+        if let Tag::Box(box_tag) = tag_box {
             let picture = Picture::for_filename(pathname);
 
             box_tag.append(&picture);
+        }
+    }
+
+    /// Sets Button behavior
+    pub fn static_button(tag_button: &Tag, action: impl Fn() + 'static) {
+        if let Tag::Button(button) = button {
+            button.connect_clicked(move |_| {
+                action();
+            });
         }
     }
 
@@ -167,6 +176,7 @@ impl Internal {
     {
         Internal::update_widget(tag, format_fn, 120);
     }
+
     /// Fetches the current storage usage as a percentage.
     pub fn get_storage() -> f64 {
         let mut system = System::new_all();
