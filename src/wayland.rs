@@ -16,7 +16,8 @@ use gtk4::{prelude::*, ApplicationWindow};
 use gtk4_layer_shell::{Edge, Layer, LayerShell};
 use once_cell::sync::Lazy;
 
-static IGNORED_WINDOWS: Lazy<Mutex<HashSet<String>>> = Lazy::new(|| Mutex::new(HashSet::new()));
+static IGNORED_WINDOWS: Lazy<Arc<Mutex<HashSet<String>>>> =
+    Lazy::new(|| Arc::new(Mutex::new(HashSet::new())));
 
 pub struct Wayland {
     chunk: ApplicationWindow,
