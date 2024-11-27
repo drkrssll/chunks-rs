@@ -77,15 +77,13 @@ fn storage(factory: &Application) {
 
 ## Slabs & Plates
 
-Chunks recently introduced two new popup widget types: Slabs and Plates.
-
+Chunks has two types of Popup widgets:
 - Slabs: Display dynamically, triggered by changes in underlying text (e.g., volume detection).
 - Plates: Display once at startup, then disappear after a set duration (e.g., welcome messages).
 
 Both share similar implementations but differ in their display behavior.
 
 > These widget types do not need a designated layer, as they are set to Overlay by default.
-> Instead of a layer, enter the amount of seconds you would like the Popups to display for.
 ```rs
 Slab::new(
     factory.clone(),
@@ -109,3 +107,56 @@ Plate::new(
 )
 .build();
 ```
+
+## Bars
+
+Chunks recently added a new widget type - Bars - which are used to display a taskbar, similar to Waybar or Polybar. These taskbars are broken down into a collection of widgets, such as a clock, a workspace switcher, and a system tray.
+
+Bar implementation is similar to the other widgets, but with a few key differences:
+- Takes a vector of Tags, which are used to determine a collection of widgets to be displayed on the taskbar.
+- Takes an Orientation type (Horizontal or Vertical) to determine the layout of the taskbar.
+
+```rs
+fn bar(factory: &Application) {
+    let mut workspaces = vec![];
+
+    for i in 0..5 {
+        let workspace = tag_button("workspace");
+        let num = i + 1;
+
+        Internal::static_button(&workspace, move || {
+            switch_workspace(num).expect("Failed to switch workspace")
+        });
+
+        Internal::static_widget(&workspace, (num).to_string());
+
+        workspaces.push(workspace);
+    }
+
+    let margins = vec![(Edge::Top, 6), (Edge::Bottom, 6), (Edge::Left, 6)];
+
+    let anchors = vec![(Edge::Top, true), (Edge::Left, true), (Edge::Bottom, true)];
+
+    Bar::new(
+        factory.clone(),
+        "Storage".to_string(),
+        workspaces,
+        margins,
+        anchors,
+        Vertical,
+    )
+    .build();
+}
+
+fn switch_workspace(number: i32) -> Result<(), std::io::Error> {
+    Command::new("hyprctl")
+        .args(&["dispatch", "workspace", &number.to_string()])
+        .output()?;
+
+    Ok(())
+}
+```
+
+The switch_workspace function is used to switch workspaces using hyperctl, a command-line tool for the Hyprland IPC. This is then passed through to your Tag using static_button, which gives your button functionality.
+
+When implementing Tags of the button type, you can use virtually any function in place of switch_workspace.
