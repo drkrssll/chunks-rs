@@ -83,7 +83,7 @@ Chunks has two types of Popup widgets:
 
 Both share similar implementations but differ in their display behavior.
 
-> These widget types do not need a designated layer, as they are set to Overlay by default.
+> These widget types do not need a designated layer, as they are set to Overlay by default. Instead of a layer, insert the number (in seconds) that you would like the Slab/Plate to show for.
 ```rs
 Slab::new(
     factory.clone(),
