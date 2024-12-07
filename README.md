@@ -157,6 +157,6 @@ fn switch_workspace(number: i32) -> Result<(), std::io::Error> {
 }
 ```
 
-The switch_workspace function is used to switch workspaces using hyperctl, a command-line tool for the Hyprland IPC. This is then passed through to your Tag using static_button, which gives your button functionality.
+The switch_workspace function is used to switch workspaces using hyprctl. This is then passed through to your Tag using static_button, which gives your button functionality.
 
 When implementing Tags of the button type, you can use virtually any function in place of switch_workspace.
