@@ -19,7 +19,7 @@ Make sure you have GTK4 and GTK4-Layer-Shell installed on your system.
 
 ```toml
 [dependencies]
-chunks-rs = "0.6.4"
+chunks-rs = "0.6.5"
 ```
 
 This will create a storage widget, similar to the one in the screenshot:
@@ -39,7 +39,7 @@ window {
 fn main() {
     let factory = Factory::new("chunk.factory");
 
-    let chunks = |factory: Application| {
+    let chunks = |factory: GtkApp| {
         storage(&factory);
 
         load_css(STYLE);
@@ -48,7 +48,7 @@ fn main() {
     factory.pollute(chunks);
 }
 
-fn storage(factory: &Application) {
+fn storage(factory: &GtkApp) {
     let tag = tag_label("storage");
     let margins = vec![(Edge::Top, 20), (Edge::Right, 160)];
     let anchors = EdgeConfig::TOP_RIGHT.to_vec();
@@ -117,7 +117,7 @@ Bar implementation is similar to the other widgets, but with a few key differenc
 - Takes an Orientation type (Horizontal or Vertical) to determine the layout of the taskbar.
 
 ```rs
-fn bar(factory: &Application) {
+fn bar(factory: &GtkApp) {
     let mut workspaces = vec![];
 
     for i in 0..5 {
