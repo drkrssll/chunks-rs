@@ -26,7 +26,7 @@ impl Chunk {
     /// Creates a new `Chunk` instance with the given parameters.
     pub fn new(
         factory: Application,
-        title: String,
+        title: &str,
         tag: Tag,
         margins: Vec<(Edge, i32)>,
         anchors: Vec<(Edge, bool)>,
@@ -34,7 +34,7 @@ impl Chunk {
     ) -> Self {
         Self {
             factory,
-            title,
+            title: title.to_string(),
             tag,
             margins,
             anchors,

@@ -13,4 +13,4 @@ pub use factory::Factory;
 pub use internal::Internal;
 pub use wayland::Wayland;
 
-pub use gtk4::{Application, ApplicationWindow, Orientation::*};
+pub use gtk4::{Application as GtkApp, ApplicationWindow as GtkWindow, Orientation::*};

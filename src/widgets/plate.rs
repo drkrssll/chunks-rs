@@ -22,7 +22,7 @@ impl Plate {
     /// Creates a new `Plate` with the given parameters.
     pub fn new(
         factory: Application,
-        title: String,
+        title: &str,
         tag: Tag,
         margins: Vec<(Edge, i32)>,
         anchors: Vec<(Edge, bool)>,
@@ -30,7 +30,7 @@ impl Plate {
     ) -> Self {
         Self {
             factory,
-            title,
+            title: title.to_string(),
             tag,
             margins,
             anchors,

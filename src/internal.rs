@@ -20,7 +20,7 @@ pub struct Internal;
 
 impl Internal {
     /// Sets the static text of a Tag, using markup if the text contains HTML-like tags.
-    pub fn static_widget(tag: &Tag, text: String) {
+    pub fn static_widget(tag: &Tag, text: &str) {
         match tag {
             Tag::Label(label) => {
                 if text.contains("</") && text.contains('>') {

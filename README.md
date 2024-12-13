@@ -19,7 +19,7 @@ Make sure you have GTK4 and GTK4-Layer-Shell installed on your system.
 
 ```toml
 [dependencies]
-chunks-rs = "0.6.3"
+chunks-rs = "0.6.4"
 ```
 
 This will create a storage widget, similar to the one in the screenshot:
@@ -65,7 +65,7 @@ fn storage(factory: &Application) {
 
     Chunk::new(
         factory.clone(),
-        "Storage".to_string(),
+        "Storage",
         tag,
         margins,
         anchors,
@@ -87,7 +87,7 @@ Both share similar implementations but differ in their display behavior.
 ```rs
 Slab::new(
     factory.clone(),
-    "Volume".to_string(),
+    "Volume",
     tag,
     margins,
     anchors,
@@ -99,7 +99,7 @@ Slab::new(
 ```rs
 Plate::new(
     factory.clone(),
-    "Greeter".to_string(),
+    "Greeter",
     tag,
     margins,
     anchors,
@@ -139,7 +139,7 @@ fn bar(factory: &Application) {
 
     Bar::new(
         factory.clone(),
-        "Storage".to_string(),
+        "Storage",
         workspaces,
         margins,
         anchors,

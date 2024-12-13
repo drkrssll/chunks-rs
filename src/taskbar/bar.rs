@@ -23,7 +23,7 @@ pub struct Bar {
 impl Bar {
     pub fn new(
         factory: Application,
-        title: String,
+        title: &str,
         tags: Vec<Tag>,
         margins: Vec<(Edge, i32)>,
         anchors: Vec<(Edge, bool)>,
@@ -31,7 +31,7 @@ impl Bar {
     ) -> Self {
         Self {
             factory,
-            title,
+            title: title.to_string(),
             tags,
             margins,
             anchors,
