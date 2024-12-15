@@ -33,7 +33,7 @@ pub fn tag_button(class_name: &str) -> Tag {
 }
 
 /// Positions a GTK4 `Tag` (for use inside of Bar)
-pub fn tag_position(tag: Tag, x: Align, y: Align) {
+pub fn tag_position(tag: &Tag, x: Align, y: Align) {
     match tag {
         Tag::Label(label) => {
             label.set_halign(x);
