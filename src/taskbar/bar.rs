@@ -19,7 +19,6 @@ pub struct Bar {
     orientation: Orientation,
 }
 
-/// Implementation of the `Bar` struct.
 impl Bar {
     pub fn new(
         factory: Application,

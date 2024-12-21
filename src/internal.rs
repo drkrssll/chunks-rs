@@ -1,13 +1,15 @@
-use std::{
-    error::Error,
-    sync::{Arc, Mutex},
-};
+use std::sync::{Arc, Mutex};
 
+use dbus::blocking::Connection;
 use gio::glib::ControlFlow;
 use gtk4::{
     glib::timeout_add_seconds_local,
     prelude::{BoxExt, ButtonExt},
     Picture,
+};
+use networkmanager::{
+    devices::{Device, Wireless},
+    Error, NetworkManager,
 };
 use pulsectl::controllers::{DeviceControl, SinkController};
 use regex::Regex;
@@ -54,8 +56,41 @@ impl Internal {
         }
     }
 
+    pub fn get_network() -> Result<String, Error> {
+        let dbus_conn = Connection::new_system()?;
+        let nm = NetworkManager::new(&dbus_conn);
+
+        for dev in nm.get_devices()? {
+            if let Device::WiFi(wifi) = dev {
+                let aps = wifi.get_all_access_points()?;
+
+                let mut max_strength = 0u8;
+                for ap in aps {
+                    let strength = ap.strength()?;
+                    if strength > max_strength {
+                        max_strength = strength;
+                    }
+                }
+
+                let wifi_status = match max_strength {
+                    0 => "░░░░░",
+                    1..=20 => "▂︎░░░░",
+                    21..=40 => "▂▃︎░░░",
+                    41..=60 => "▂▃▄︎░░",
+                    61..=80 => "▂▃▄▅︎░",
+                    81..=100 => "▂▃▄▅▆",
+                    _ => "×",
+                };
+
+                return Ok(wifi_status.to_string());
+            }
+        }
+
+        Ok("░░░░░".to_string())
+    }
+
     /// Fetches the weather for a given location using the wttr.in API.
-    pub async fn get_weather(location: &str) -> Result<String, Box<dyn Error>> {
+    pub async fn get_weather(location: &str) -> Result<String, Box<dyn std::error::Error>> {
         let url = format!("https://wttr.in/{}?format=3", location);
         let response = reqwest::get(&url).await?.text().await?;
 

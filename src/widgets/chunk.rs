@@ -21,7 +21,6 @@ pub struct Chunk {
     layer: Layer,
 }
 
-/// Implementation of the `Chunk` struct.
 impl Chunk {
     /// Creates a new `Chunk` instance with the given parameters.
     pub fn new(

@@ -165,11 +165,13 @@ name = "chunks-rs"
 version = "0.6.5"
 dependencies = [
  "chrono",
+ "dbus",
  "gdk-pixbuf",
  "gdk4-x11",
  "gio",
  "gtk4",
  "gtk4-layer-shell",
+ "networkmanager",
  "once_cell",
  "pulsectl-rs",
  "regex",
@@ -217,6 +219,17 @@ name = "crossbeam-utils"
 version = "0.8.20"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "22ec99545bb0ed0ea7bb9b8e1e9122ea386ff8a48c0922e43f36d45ab09e0e80"
+
+[[package]]
+name = "dbus"
+version = "0.9.7"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1bb21987b9fb1613058ba3843121dd18b163b254d8a6e797e144cbac14d96d1b"
+dependencies = [
+ "libc",
+ "libdbus-sys",
+ "winapi",
+]
 
 [[package]]
 name = "either"
@@ -933,6 +946,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "561d97a539a36e26a9a5fad1ea11a3039a67714694aaa379433e580854bc3dc5"
 
 [[package]]
+name = "libdbus-sys"
+version = "0.2.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "06085512b750d640299b79be4bad3d2fa90a9c00b1fd9e1b46364f66f0485c72"
+dependencies = [
+ "pkg-config",
+]
+
+[[package]]
 name = "libpulse-binding"
 version = "2.28.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -941,7 +963,7 @@ dependencies = [
  "bitflags 1.3.2",
  "libc",
  "libpulse-sys",
- "num-derive",
+ "num-derive 0.3.3",
  "num-traits",
  "winapi",
 ]
@@ -953,7 +975,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bc19e110fbf42c17260d30f6d3dc545f58491c7830d38ecb9aaca96e26067a9b"
 dependencies = [
  "libc",
- "num-derive",
+ "num-derive 0.3.3",
  "num-traits",
  "pkg-config",
  "winapi",
@@ -1031,6 +1053,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "networkmanager"
+version = "0.4.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "36c7a94a505f4bdf5c605ade8a131f7487bbb80170ac27051ba569aa21598cd8"
+dependencies = [
+ "dbus",
+ "num-derive 0.4.2",
+ "num-traits",
+]
+
+[[package]]
 name = "ntapi"
 version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1048,6 +1081,17 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn 1.0.109",
+]
+
+[[package]]
+name = "num-derive"
+version = "0.4.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ed3955f1a9c7c0c15e092f9c887db08b1fc683305fdf6eb6684f22555355e202"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.79",
 ]
 
 [[package]]

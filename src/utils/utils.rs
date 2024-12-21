@@ -33,7 +33,9 @@ pub fn tag_button(class_name: &str) -> Tag {
 }
 
 /// Positions a GTK4 `Tag` (for use inside of Bar)
-pub fn tag_position(tag: &Tag, x: Align, y: Align) {
+// private because it doesnt work? (or i dont know what im doing)
+// fuck it, ill just use CSS for this shit anyways
+fn tag_position(tag: &Tag, x: Align, y: Align) {
     match tag {
         Tag::Label(label) => {
             label.set_halign(x);

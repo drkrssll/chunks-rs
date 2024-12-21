@@ -74,6 +74,7 @@ fn storage(factory: &GtkApp) {
     .build();
 }
 ```
+> All widgets have a CSS class of "window". It is important to make the GTK4 windows transparent, as the Layer Shell handles the widget's appearance.
 
 ## Slabs & Plates
 
@@ -156,6 +157,7 @@ fn switch_workspace(number: i32) -> Result<(), std::io::Error> {
     Ok(())
 }
 ```
+> Similar to the application window, the taskbar has a default CSS class of "taskbar".
 
 The switch_workspace function is used to switch workspaces using hyprctl. This is then passed through to your Tag using static_button, which gives your button functionality.
 
