@@ -38,7 +38,10 @@ impl Factory {
     }
 
     /// Runs the application with arguments.
-    fn pollute_with_args(self, chunks: impl Fn(Application, Vec<String>) + 'static) -> ExitCode {
+    pub fn pollute_with_args(
+        self,
+        chunks: impl Fn(Application, Vec<String>) + 'static,
+    ) -> ExitCode {
         let args: Vec<String> = env::args().collect();
 
         self.application.connect_activate(move |app| {
