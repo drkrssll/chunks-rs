@@ -15,9 +15,17 @@ pub struct Factory {
 impl Factory {
     /// Creates a new `Factory` with the given application ID.
     pub fn new(id: &str) -> Self {
-        let application = Application::builder().application_id(id).build();
+        if env::args().len() > 1 {
+            let application = Application::builder()
+                .application_id(id)
+                .flags(ApplicationFlags::HANDLES_COMMAND_LINE)
+                .build();
 
-        Self { application }
+            Self { application }
+        } else {
+            let application = Application::builder().application_id(id).build();
+            Self { application }
+        }
     }
 
     /// Runs the application.
