@@ -1,4 +1,4 @@
-use std::{env, process::ExitCode};
+use std::env;
 
 use gio::ApplicationFlags;
 use gtk4::{
