@@ -1,3 +1,6 @@
+use std::{env, process::ExitCode};
+
+use gio::ApplicationFlags;
 use gtk4::{
     glib::ExitCode,
     prelude::{ApplicationExt, ApplicationExtManual},
@@ -12,15 +15,34 @@ pub struct Factory {
 impl Factory {
     /// Creates a new `Factory` with the given application ID.
     pub fn new(id: &str) -> Self {
-        let application = Application::builder().application_id(id).build();
-
-        Self { application }
+        if env::args().len() > 1 {
+            let application = Application::builder()
+                .application_id(id)
+                .flags(ApplicationFlags::HANDLES_COMMAND_LINE)
+                .build();
+            Self { application }
+        } else {
+            let application = Application::builder().application_id(id).build();
+            Self { application }
+        }
     }
 
     /// Runs the application.
     pub fn pollute(self, chunks: impl Fn(Application) + 'static) -> ExitCode {
         self.application.connect_activate(move |app| {
             chunks(app.clone());
+        });
+
+        self.application.run();
+        ExitCode::SUCCESS
+    }
+
+    /// Runs the application with arguments.
+    fn pollute_with_args(self, chunks: impl Fn(Application, Vec<String>) + 'static) -> ExitCode {
+        let args: Vec<String> = env::args().collect();
+
+        self.application.connect_activate(move |app| {
+            chunks(app.clone(), args.clone());
         });
 
         self.application.run();
