@@ -164,7 +164,7 @@ The switch_workspace function is used to switch workspaces using hyprctl. This i
 When implementing Tags of the button type, you can use virtually any function in place of switch_workspace.
 
 ## Argmuent Parsing
-Passing arguments through to your application is a bit more complicated than usual. To adhere to the GTK4's command line argument handling, you must use the following code:
+Passing arguments through to your application is a bit more complicated than usual. To adhere to GTK4's command line argument handling, you must use the following code:
 
 ```rs
 fn main() {
