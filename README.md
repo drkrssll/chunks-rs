@@ -177,21 +177,20 @@ fn main() {
             return 1;
         }
 
-        match args[1].as_os_str() {
-            os if os == OsStr::new("storage") => {
+        match args[1].to_str().unwrap_or_default() {
+            "storage" => {
                 storage(app);
-
                 load_css(STYLE);
                 0
             }
-            _ => {
-                eprintln!("Unknown argument: {}", args[1].to_string_lossy());
+            arg => {
+                eprintln!("Unknown argument: {arg}");
                 1
             }
         }
     };
 
-    // May seem redundant to collect the args a second time, but to avoid type errors, it is necessary.
+    // It may seem redundant to collect the args a second time, but to avoid type errors, it is necessary.
     let args: Vec<String> = env::args().collect();
 
     factory.pollute_with_args(chunks, args);
