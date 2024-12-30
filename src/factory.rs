@@ -1,6 +1,6 @@
 use std::env;
 
-use gio::ApplicationFlags;
+use gio::{ApplicationCommandLine, ApplicationFlags};
 use gtk4::{
     glib::ExitCode,
     prelude::{ApplicationExt, ApplicationExtManual},
@@ -42,11 +42,16 @@ impl Factory {
     pub fn pollute_with_args(
         self,
         chunks: impl Fn(Application) + 'static,
+        handler: impl Fn(&Application, &ApplicationCommandLine) -> i32 + 'static,
         args: Vec<String>,
     ) -> ExitCode {
+        // Connect the activate signal
         self.application.connect_activate(move |app| {
             chunks(app.clone());
         });
+
+        // Connect the command-line signal with correct signature
+        self.application.connect_command_line(handler);
 
         self.application.run_with_args(&args);
         ExitCode::SUCCESS
