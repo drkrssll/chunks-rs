@@ -15,4 +15,6 @@ pub use wayland::Wayland;
 
 pub use gio::prelude::ApplicationCommandLineExt as GtkCmdLineExt;
 pub use gio::ApplicationCommandLine as GtkCmdLine;
-pub use gtk4::{Application as GtkApp, ApplicationWindow as GtkWindow, Orientation::*};
+pub use gtk4::{
+    Application as GtkApp, ApplicationWindow as GtkWindow, Orientation::*, Orientation::*,
+};

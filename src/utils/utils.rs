@@ -17,18 +17,28 @@ pub fn tag_label(class_name: &str) -> Tag {
     Tag::Label(tag)
 }
 
-/// Creates a new GTK4 `Box` with a specified CSS class name, orientation and spacing.
-pub fn tag_box(class_name: &str, orientation: &str, spacing: i32, widgets: Vec<Tag>) -> Tag {
-    let orientation = match orientation {
-        "v" => Orientation::Vertical,
-        "h" => Orientation::Horizontal,
-        "vertical" => Orientation::Vertical,
-        "horizontal" => Orientation::Horizontal,
-        _ => Orientation::Vertical,
-    };
+/// Creates a new GTK4 `Box` with a specified CSS class name.
+/// Can be used for images.
+pub fn tag_box(class_name: &str) -> Tag {
+    let tag = Box::new(Orientation::Vertical, 0);
 
-    let tag = Box::new(orientation, spacing);
     tag.set_widget_name(class_name);
+
+    Tag::Box(tag)
+}
+
+/// Creates a new GTK4 `Box` with a specified CSS class name, orientation and spacing.
+/// Used for grouping widgets together.
+pub fn tag_container(
+    class_name: &str,
+    orientation: Orientation,
+    spacing: i32,
+    widgets: Vec<Tag>,
+) -> Tag {
+    let tag = Box::new(orientation, spacing);
+
+    tag.set_widget_name(class_name);
+
     let widgets: Vec<Widget> = widgets
         .into_iter()
         .map(|tag| match tag {
@@ -41,6 +51,7 @@ pub fn tag_box(class_name: &str, orientation: &str, spacing: i32, widgets: Vec<T
     for widget in widgets {
         tag.append(&widget);
     }
+
     Tag::Box(tag)
 }
 
