@@ -162,3 +162,38 @@ fn switch_workspace(number: i32) -> Result<(), std::io::Error> {
 The switch_workspace function is used to switch workspaces using hyprctl. This is then passed through to your Tag using static_button, which gives your button functionality.
 
 When implementing Tags of the button type, you can use virtually any function in place of switch_workspace.
+
+## Argmuent Parsing
+Passing arguments through to your application is a bit more complicated than usual. To adhere to the GTK4's command line argument handling, you must use the following code:
+
+```rs
+fn main() {
+    let factory = Factory::new("chunk.factory");
+
+    let chunks = |app: &GtkApp, cmd_line: &GtkCmdLine| {
+        let args = cmd_line.arguments();
+        if args.len() < 2 {
+            eprintln!("No command provided");
+            return 1;
+        }
+
+        match args[1].as_os_str() {
+            os if os == OsStr::new("storage") => {
+                storage(app);
+
+                load_css(STYLE);
+                0
+            }
+            _ => {
+                eprintln!("Unknown argument: {}", args[1].to_string_lossy());
+                1
+            }
+        }
+    };
+
+    // May seem redundant to collect the args a second time, but to avoid type errors, it is necessary.
+    let args: Vec<String> = env::args().collect();
+
+    factory.pollute_with_args(chunks, args);
+}
+```
