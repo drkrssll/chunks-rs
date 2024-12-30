@@ -17,7 +17,7 @@ pub fn tag_label(class_name: &str) -> Tag {
     Tag::Label(tag)
 }
 
-/// Creates a new GTK4 `Box` with a specified CSS class name.
+/// Creates a new GTK4 `Box` with a specified CSS class name, orientation and spacing.
 pub fn tag_box(class_name: &str, orientation: &str, spacing: i32, widgets: Vec<Tag>) -> Tag {
     let orientation = match orientation {
         "v" => Orientation::Vertical,
