@@ -41,15 +41,9 @@ impl Factory {
     /// Runs the application with arguments.
     pub fn pollute_with_args(
         self,
-        chunks: impl Fn(Application) + 'static,
         handler: impl Fn(&Application, &ApplicationCommandLine) -> i32 + 'static,
         args: Vec<String>,
     ) -> ExitCode {
-        // Connect the activate signal
-        self.application.connect_activate(move |app| {
-            chunks(app.clone());
-        });
-
         // Connect the command-line signal with correct signature
         self.application.connect_command_line(handler);
 
