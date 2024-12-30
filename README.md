@@ -19,7 +19,7 @@ Make sure you have GTK4 and GTK4-Layer-Shell installed on your system.
 
 ```toml
 [dependencies]
-chunks-rs = "0.7.0"
+chunks-rs = "0.7.1"
 ```
 
 This will create a storage widget, similar to the one in the screenshot:
