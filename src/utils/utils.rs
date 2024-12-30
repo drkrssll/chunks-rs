@@ -1,8 +1,11 @@
 use crate::widgets::Tag;
 
+use gio::prelude::Cast;
 use gtk4::{
-    gdk::Display, prelude::WidgetExt, style_context_add_provider_for_display, Align, Box,
-    CssProvider, Label, Orientation, STYLE_PROVIDER_PRIORITY_APPLICATION,
+    gdk::Display,
+    prelude::{BoxExt, WidgetExt},
+    style_context_add_provider_for_display, Align, Box, CssProvider, Label, Orientation, Widget,
+    STYLE_PROVIDER_PRIORITY_APPLICATION,
 };
 
 /// Creates a new GTK4 `Label` with a specified CSS class name.
@@ -14,12 +17,30 @@ pub fn tag_label(class_name: &str) -> Tag {
     Tag::Label(tag)
 }
 
-/// Creates a new GTK4 `Box` with a specified CSS class name.
-pub fn tag_box(class_name: &str) -> Tag {
-    let tag = Box::new(Orientation::Vertical, 0);
+/// Creates a new GTK4 `Box` with a specified CSS class name, orientation and spacing.
+pub fn tag_box(class_name: &str, orientation: &str, spacing: i32, widgets: Vec<Tag>) -> Tag {
+    let orientation = match orientation {
+        "v" => Orientation::Vertical,
+        "h" => Orientation::Horizontal,
+        "vertical" => Orientation::Vertical,
+        "horizontal" => Orientation::Horizontal,
+        _ => Orientation::Vertical,
+    };
 
+    let tag = Box::new(orientation, spacing);
     tag.set_widget_name(class_name);
+    let widgets: Vec<Widget> = widgets
+        .into_iter()
+        .map(|tag| match tag {
+            Tag::Label(label) => label.clone().upcast::<Widget>(),
+            Tag::Box(box_) => box_.clone().upcast::<Widget>(),
+            Tag::Button(button) => button.clone().upcast::<Widget>(),
+        })
+        .collect();
 
+    for widget in widgets {
+        tag.append(&widget);
+    }
     Tag::Box(tag)
 }
 
