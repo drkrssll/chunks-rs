@@ -22,6 +22,7 @@ pub struct Chunk {
     margins: Vec<(Edge, i32)>,
     anchors: Vec<(Edge, bool)>,
     layer: Layer,
+    resize: bool,
 }
 
 impl Chunk {
@@ -33,6 +34,7 @@ impl Chunk {
         margins: Vec<(Edge, i32)>,
         anchors: Vec<(Edge, bool)>,
         layer: Layer,
+        resize: bool,
     ) -> Self {
         Self {
             factory,
@@ -41,6 +43,7 @@ impl Chunk {
             margins,
             anchors,
             layer,
+            resize,
         }
     }
 
@@ -57,6 +60,7 @@ impl Chunk {
             .application(&self.factory)
             .title(self.title)
             .child(&child)
+            .resizable(self.resize)
             .build();
 
         if Wayland::detect_wayland() {
@@ -66,7 +70,7 @@ impl Chunk {
         }
 
         chunk.set_decorated(false);
-        chunk.set_resizable(false);
+        // chunk.set_resizable(false);
 
         chunk.present()
     }
