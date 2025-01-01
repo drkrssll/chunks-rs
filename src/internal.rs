@@ -226,4 +226,11 @@ impl Internal {
 
         ((total_space - available_space) as f64 / total_space as f64 * 100.0).round()
     }
+
+    /// Listens to the variable for changing the state of tag_revealer
+    pub fn update_revealer(tag: &Tag, open: bool) {
+        if let Tag::Revealer(revealer) = tag {
+            revealer.set_reveal_child(open);
+        }
+    }
 }

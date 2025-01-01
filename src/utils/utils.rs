@@ -4,8 +4,8 @@ use gio::prelude::Cast;
 use gtk4::{
     gdk::Display,
     prelude::{BoxExt, WidgetExt},
-    style_context_add_provider_for_display, Align, Box, CssProvider, Label, Orientation, Widget,
-    STYLE_PROVIDER_PRIORITY_APPLICATION,
+    style_context_add_provider_for_display, Align, Box, CssProvider, Label, Orientation, Revealer,
+    RevealerTransitionType, Widget, STYLE_PROVIDER_PRIORITY_APPLICATION,
 };
 
 /// Creates a new GTK4 `Label` with a specified CSS class name.
@@ -45,6 +45,7 @@ pub fn tag_container(
             Tag::Label(label) => label.clone().upcast::<Widget>(),
             Tag::Box(box_) => box_.clone().upcast::<Widget>(),
             Tag::Button(button) => button.clone().upcast::<Widget>(),
+            Tag::Revealer(revealer) => revealer.clone().upcast::<Widget>(),
         })
         .collect();
 
@@ -64,6 +65,27 @@ pub fn tag_button(class_name: &str) -> Tag {
     Tag::Button(tag)
 }
 
+pub fn tag_revealer(
+    class_name: &str,
+    child: Tag,
+    duration: u32,
+    transition: RevealerTransitionType,
+) -> Tag {
+    let tag = Revealer::new();
+    tag.set_transition_duration(duration);
+    tag.set_transition_type(transition);
+
+    tag.set_widget_name(class_name);
+    match child {
+        Tag::Box(box_) => tag.set_child(Some(&box_)),
+        Tag::Label(label) => tag.set_child(Some(&label)),
+        Tag::Button(button) => tag.set_child(Some(&button)),
+        Tag::Revealer(revealer) => tag.set_child(Some(&revealer)),
+    }
+
+    Tag::Revealer(tag)
+}
+
 /// Positions a GTK4 `Tag` (for use inside of Bar)
 // private because it doesnt work? (or i dont know what im doing)
 // fuck it, ill just use CSS for this shit anyways
@@ -80,6 +102,10 @@ fn tag_position(tag: &Tag, x: Align, y: Align) {
         Tag::Button(button) => {
             button.set_halign(x);
             button.set_valign(y);
+        }
+        Tag::Revealer(revealer) => {
+            revealer.set_halign(x);
+            revealer.set_valign(y);
         }
     }
 }

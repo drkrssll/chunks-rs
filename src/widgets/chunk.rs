@@ -1,13 +1,16 @@
 use crate::Wayland;
 
 use gio::prelude::Cast;
-use gtk4::{prelude::GtkWindowExt, Application, ApplicationWindow, Box, Button, Label, Widget};
+use gtk4::{
+    prelude::GtkWindowExt, Application, ApplicationWindow, Box, Button, Label, Revealer, Widget,
+};
 use gtk4_layer_shell::{Edge, Layer};
 
 pub enum Tag {
     Label(Label),
     Box(Box),
     Button(Button),
+    Revealer(Revealer),
 }
 
 /// Represents a GTK4 window with a configuration for positioning/display on Wayland.
@@ -47,6 +50,7 @@ impl Chunk {
             Tag::Label(label) => label.upcast::<Widget>(),
             Tag::Box(box_) => box_.upcast::<Widget>(),
             Tag::Button(button) => button.upcast::<Widget>(),
+            Tag::Revealer(revealer) => revealer.upcast::<Widget>(),
         };
 
         let chunk = ApplicationWindow::builder()
