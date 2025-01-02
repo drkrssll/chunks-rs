@@ -20,6 +20,7 @@ use sysinfo::{DiskExt, System, SystemExt};
 
 use crate::widgets::Tag;
 
+#[derive(Clone, Copy)]
 pub struct RevealerState {
     pub open: bool,
 }
@@ -235,17 +236,10 @@ impl Internal {
     }
 
     /// Listens to the variable for changing the state of tag_reveal
-    pub fn update_revealer(tag: &Tag, state: Arc<Mutex<RevealerState>>) {
-        if let Tag::Revealer(revealer) = tag {
-            let state = Arc::clone(&state);
-            let revealer = revealer.clone();
-
-            timeout_add_local(Duration::from_millis(100), move || {
-                if let Ok(state) = state.lock() {
-                    revealer.set_reveal_child(state.open);
-                }
-                ControlFlow::Continue
-            });
+    pub fn update_revealer(tag: &Tag, mut state: RevealerState) {
+        state.open = !state.open;
+        if let Tag::Revealer(rev) = tag {
+            rev.set_reveal_child(state.open);
         }
     }
 }

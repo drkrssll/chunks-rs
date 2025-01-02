@@ -1,4 +1,3 @@
-use std::env;
 
 use gio::{ApplicationCommandLine, ApplicationFlags};
 use gtk4::{
