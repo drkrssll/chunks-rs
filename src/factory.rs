@@ -15,17 +15,8 @@ pub struct Factory {
 impl Factory {
     /// Creates a new `Factory` with the given application ID.
     pub fn new(id: &str) -> Self {
-        if env::args().len() > 1 {
-            let application = Application::builder()
-                .application_id(id)
-                .flags(ApplicationFlags::HANDLES_COMMAND_LINE)
-                .build();
-
-            Self { application }
-        } else {
-            let application = Application::builder().application_id(id).build();
-            Self { application }
-        }
+        let application = Application::builder().application_id(id).build();
+        Self { application }
     }
 
     /// Runs the application.
@@ -44,7 +35,9 @@ impl Factory {
         handler: impl Fn(&Application, &ApplicationCommandLine) -> i32 + 'static,
         args: Vec<String>,
     ) -> ExitCode {
-        // Connect the command-line signal with correct signature
+        self.application
+            .set_flags(ApplicationFlags::HANDLES_COMMAND_LINE);
+
         self.application.connect_command_line(handler);
 
         self.application.run_with_args(&args);

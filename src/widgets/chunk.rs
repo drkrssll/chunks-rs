@@ -11,6 +11,7 @@ pub enum Tag {
     Box(Box),
     Button(Button),
     Revealer(Revealer),
+    Undefined,
 }
 
 /// Represents a GTK4 window with a configuration for positioning/display on Wayland.
@@ -54,6 +55,7 @@ impl Chunk {
             Tag::Box(box_) => box_.upcast::<Widget>(),
             Tag::Button(button) => button.upcast::<Widget>(),
             Tag::Revealer(revealer) => revealer.upcast::<Widget>(),
+            Tag::Undefined => panic!("Tag is undefined!"),
         };
 
         let chunk = ApplicationWindow::builder()

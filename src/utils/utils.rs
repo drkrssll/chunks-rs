@@ -46,6 +46,7 @@ pub fn tag_container(
             Tag::Box(box_) => box_.clone().upcast::<Widget>(),
             Tag::Button(button) => button.clone().upcast::<Widget>(),
             Tag::Revealer(revealer) => revealer.clone().upcast::<Widget>(),
+            Tag::Undefined => panic!("Tag is undefined!"),
         })
         .collect();
 
@@ -81,6 +82,7 @@ pub fn tag_revealer(
         Tag::Label(label) => tag.set_child(Some(&label)),
         Tag::Button(button) => tag.set_child(Some(&button)),
         Tag::Revealer(revealer) => tag.set_child(Some(&revealer)),
+        _ => return Tag::Undefined,
     }
 
     Tag::Revealer(tag)
@@ -106,6 +108,9 @@ fn tag_position(tag: &Tag, x: Align, y: Align) {
         Tag::Revealer(revealer) => {
             revealer.set_halign(x);
             revealer.set_valign(y);
+        }
+        Tag::Undefined => {
+            panic!("Tag is undefined!");
         }
     }
 }
