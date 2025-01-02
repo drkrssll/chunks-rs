@@ -1,14 +1,17 @@
-use std::sync::{Arc, Mutex};
+use std::{
+    sync::{Arc, Mutex},
+    time::Duration,
+};
 // use std::thread::sleep;
 // use std::time::Duration;
 // use glib;
 
 use dbus::blocking::Connection;
-use gio::glib::ControlFlow;
+use gio::glib::{timeout_add_local, ControlFlow};
 use gtk4::{
     glib::timeout_add_seconds_local,
     prelude::{BoxExt, ButtonExt},
-    Picture,
+    Picture, Revealer,
 };
 use networkmanager::{
     devices::{Device, Wireless},
@@ -19,6 +22,10 @@ use regex::Regex;
 use sysinfo::{DiskExt, System, SystemExt};
 
 use crate::widgets::Tag;
+
+pub struct RevealerState {
+    pub open: bool,
+}
 
 /// Collection of internal utilities for your widgets, including widget state management and data fetching.
 pub struct Internal;
@@ -231,11 +238,20 @@ impl Internal {
     }
 
     /// Listens to the variable for changing the state of tag_reveal
-    pub fn update_revealer(tag: &Tag, open: bool) {
+    pub fn update_revealer(tag: &Tag, state: Arc<Mutex<RevealerState>>) {
         if let Tag::Revealer(revealer) = tag {
-            revealer.set_reveal_child(open);
+            let state = Arc::clone(&state);
+            let revealer = revealer.clone();
+
+            timeout_add_local(Duration::from_millis(100), move || {
+                if let Ok(state) = state.lock() {
+                    revealer.set_reveal_child(state.open);
+                }
+                ControlFlow::Continue
+            });
         }
     }
+
     // pub fn update_revealer(tag: Arc<Tag>, open_state: Arc<Mutex<bool>>) {
     //     glib::timeout_add_local(std::time::Duration::from_secs(2), move || {
     //         // Read the current state of `open`.
