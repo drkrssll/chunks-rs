@@ -67,6 +67,7 @@ impl Slab {
             Tag::Label(label) => label.upcast::<Widget>(),
             Tag::Box(box_) => box_.upcast::<Widget>(),
             Tag::Button(button) => button.upcast::<Widget>(),
+            Tag::Revealer(revealer) => revealer.upcast::<Widget>(),
         };
 
         let slab = ApplicationWindow::builder()
