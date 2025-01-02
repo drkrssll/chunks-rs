@@ -1,10 +1,10 @@
 use std::{
+    rc::Rc,
     sync::{Arc, Mutex},
-    time::Duration,
 };
 
 use dbus::blocking::Connection;
-use gio::glib::{timeout_add_local, ControlFlow};
+use gio::glib::ControlFlow;
 use gtk4::{
     glib::timeout_add_seconds_local,
     prelude::{BoxExt, ButtonExt},
@@ -236,7 +236,7 @@ impl Internal {
     }
 
     /// Listens to the variable for changing the state of tag_reveal
-    pub fn update_revealer(revealer: Tag, state: Arc<Mutex<RevealerState>>) {
+    pub fn update_revealer(revealer: Tag, state: Rc<Mutex<RevealerState>>) {
         if let Ok(mut state) = state.lock() {
             state.open = !state.open;
             if let Tag::Revealer(rev) = revealer {
