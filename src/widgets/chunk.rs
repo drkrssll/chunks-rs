@@ -6,6 +6,7 @@ use gtk4::{
 };
 use gtk4_layer_shell::{Edge, Layer};
 
+#[derive(Clone)]
 pub enum Tag {
     Label(Label),
     Box(Box),
