@@ -236,10 +236,12 @@ impl Internal {
     }
 
     /// Listens to the variable for changing the state of tag_reveal
-    pub fn update_revealer(tag: &Tag, mut state: RevealerState) {
-        state.open = !state.open;
-        if let Tag::Revealer(rev) = tag {
-            rev.set_reveal_child(state.open);
+    pub fn update_revealer(revealer: Tag, state: Arc<Mutex<RevealerState>>) {
+        if let Ok(mut state) = state.lock() {
+            state.open = !state.open;
+            if let Tag::Revealer(rev) = revealer {
+                rev.set_reveal_child(state.open);
+            }
         }
     }
 }
