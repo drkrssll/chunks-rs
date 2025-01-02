@@ -11,6 +11,7 @@ pub mod widgets;
 
 pub use factory::Factory;
 pub use internal::Internal;
+pub use internal::RevealerState;
 pub use wayland::Wayland;
 
 pub use gio::prelude::ApplicationCommandLineExt as GtkCmdLineExt;
