@@ -2,16 +2,13 @@ use std::{
     sync::{Arc, Mutex},
     time::Duration,
 };
-// use std::thread::sleep;
-// use std::time::Duration;
-// use glib;
 
 use dbus::blocking::Connection;
 use gio::glib::{timeout_add_local, ControlFlow};
 use gtk4::{
     glib::timeout_add_seconds_local,
     prelude::{BoxExt, ButtonExt},
-    Picture, Revealer,
+    Picture,
 };
 use networkmanager::{
     devices::{Device, Wireless},
@@ -251,21 +248,4 @@ impl Internal {
             });
         }
     }
-
-    // pub fn update_revealer(tag: Arc<Tag>, open_state: Arc<Mutex<bool>>) {
-    //     glib::timeout_add_local(std::time::Duration::from_secs(2), move || {
-    //         // Read the current state of `open`.
-    //         let open = {
-    //             let lock = open_state.lock().unwrap();
-    //             *lock
-    //         };
-    //
-    //         // Update the Revealer state if the tag is a Revealer.
-    //         if let Tag::Revealer(revealer) = &*tag {
-    //             revealer.set_reveal_child(open);
-    //         }
-    //
-    //         glib::source::Continue(true) // Continue the loop.
-    //     });
-    // }
 }

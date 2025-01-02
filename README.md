@@ -19,7 +19,7 @@ Make sure you have GTK4 and GTK4-Layer-Shell installed on your system.
 
 ```toml
 [dependencies]
-chunks-rs = "0.7.1"
+chunks-rs = "0.7.2"
 ```
 
 This will create a storage widget, similar to the one in the screenshot:
@@ -70,6 +70,7 @@ fn storage(factory: &GtkApp) {
         margins,
         anchors,
         Layer::Bottom,
+        false, // change to true for tag_revealer
     )
     .build();
 }

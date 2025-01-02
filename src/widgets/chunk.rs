@@ -73,7 +73,6 @@ impl Chunk {
         }
 
         chunk.set_decorated(false);
-        // chunk.set_resizable(false);
 
         chunk.present()
     }
