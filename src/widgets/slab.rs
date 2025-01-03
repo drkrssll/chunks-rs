@@ -10,7 +10,7 @@ use gtk4::{
 };
 use gtk4_layer_shell::{Edge, Layer};
 
-use crate::{widgets::Tag, Wayland};
+use crate::{widgets::Tag, Builder, Wayland};
 
 pub struct Slab {
     factory: Application,
@@ -60,9 +60,11 @@ impl Slab {
         }
         Self::process_events(0, 10);
     }
+}
 
+impl Builder for Slab {
     /// Builds and displays the `Slab` window, which will show whenever the text changes.
-    pub fn build(self) {
+    fn build(self) {
         let child = match self.tag {
             Tag::Label(label) => label.upcast::<Widget>(),
             Tag::Box(box_) => box_.upcast::<Widget>(),

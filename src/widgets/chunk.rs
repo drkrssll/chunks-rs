@@ -1,6 +1,5 @@
-use crate::Wayland;
+use crate::{Builder, Wayland};
 
-use super::builder::Builder;
 use gio::prelude::Cast;
 use gtk4::{
     prelude::GtkWindowExt, Application, ApplicationWindow, Box, Button, Label, Revealer, Widget,

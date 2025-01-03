@@ -1,4 +1,4 @@
-use crate::{widgets::Tag, Wayland};
+use crate::{widgets::Tag, Builder, Wayland};
 
 use std::time::Duration;
 
@@ -37,10 +37,12 @@ impl Plate {
             duration,
         }
     }
+}
 
+impl Builder for Plate {
     /// Builds and displays the `Plate` window, which will close automatically after a set duration.
     /// Perfect for greeter widgets.
-    pub fn build(self) {
+    fn build(self) {
         let child = match self.tag {
             Tag::Label(label) => label.upcast::<Widget>(),
             Tag::Box(box_) => box_.upcast::<Widget>(),

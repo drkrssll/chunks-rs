@@ -5,7 +5,7 @@ use gtk4::{
 };
 use gtk4_layer_shell::{Edge, Layer, LayerShell};
 
-use crate::widgets::Tag;
+use crate::{widgets::Tag, Builder};
 
 /// The vector of tags represents text boxes with CSS class names for styling.
 /// These tags are then appended to the GTK4 `Box` widget, in order to break your taskbar into
@@ -37,10 +37,12 @@ impl Bar {
             orientation,
         }
     }
+}
 
+impl Builder for Bar {
     /// By default, the Bar is built with a CSS class name of "taskbar".
     /// All underlying Tags will retain their respective CSS class names, for advanced styling.
-    pub fn build(&self) {
+    fn build(self) {
         let mut children: Vec<Widget> = Vec::new();
 
         for tag in &self.tags {
