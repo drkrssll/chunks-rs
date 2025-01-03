@@ -241,8 +241,6 @@ impl Internal {
             state.open = !state.open;
             if let Tag::Revealer(rev) = revealer {
                 rev.set_reveal_child(state.open);
-
-                rev.queue_resize();
             }
         }
     }
