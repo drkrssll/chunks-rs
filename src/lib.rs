@@ -13,6 +13,7 @@ pub use factory::Factory;
 pub use internal::Internal;
 pub use internal::RevealerState;
 pub use wayland::Wayland;
+pub use widgets::builder::Builder;
 
 pub use gio::prelude::ApplicationCommandLineExt as GtkCmdLineExt;
 pub use gio::ApplicationCommandLine as GtkCmdLine;

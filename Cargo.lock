@@ -162,7 +162,7 @@ dependencies = [
 
 [[package]]
 name = "chunks-rs"
-version = "0.7.2"
+version = "0.7.3"
 dependencies = [
  "chrono",
  "dbus",

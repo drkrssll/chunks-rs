@@ -1,5 +1,6 @@
 use crate::Wayland;
 
+use super::builder::Builder;
 use gio::prelude::Cast;
 use gtk4::{
     prelude::GtkWindowExt, Application, ApplicationWindow, Box, Button, Label, Revealer, Widget,
@@ -48,9 +49,11 @@ impl Chunk {
             resize,
         }
     }
+}
 
+impl Builder for Chunk {
     /// Builds and displays the `Chunk` window, configuring it for Wayland if detected.
-    pub fn build(self) {
+    fn build(self) {
         let child = match self.tag {
             Tag::Label(label) => label.upcast::<Widget>(),
             Tag::Box(box_) => box_.upcast::<Widget>(),
