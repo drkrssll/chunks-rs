@@ -7,7 +7,7 @@ use dbus::blocking::Connection;
 use gio::glib::ControlFlow;
 use gtk4::{
     glib::timeout_add_seconds_local,
-    prelude::{BoxExt, ButtonExt},
+    prelude::{BoxExt, ButtonExt, WidgetExt},
     Picture,
 };
 use networkmanager::{
@@ -241,6 +241,8 @@ impl Internal {
             state.open = !state.open;
             if let Tag::Revealer(rev) = revealer {
                 rev.set_reveal_child(state.open);
+
+                rev.queue_resize();
             }
         }
     }
