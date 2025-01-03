@@ -2,7 +2,7 @@
 [![Crates.io](https://img.shields.io/crates/d/chunks-rs?style=flat-square&color=red)](https://crates.io/crates/chunks-rs)
 
 ### Special Thanks to:
-- [Bhaumik](https://github.com/bhaumik-tripathi) for helping me see beyond my own desires for this project.
+- [Bhaumik](https://github.com/bhaumik-tripathi), for helping me see beyond my own desires for this project.
 
 ## Description
 
