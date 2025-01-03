@@ -1,10 +1,10 @@
 # Chunks-rs
 [![Crates.io](https://img.shields.io/crates/d/chunks-rs?style=flat-square&color=red)](https://crates.io/crates/chunks-rs)
 
-## Contributors
 ### Special Thanks to:
 - [Bhaumik](https://github.com/bhaumik-tripathi) for helping me see beyond my own desires for this project.
 
+## Description
 
 A library that simplifies the process of making widgets for Wayland Compositors.
 
