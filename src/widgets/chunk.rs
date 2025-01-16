@@ -68,6 +68,7 @@ impl Builder for Chunk {
             .resizable(self.resize)
             .build();
 
+        chunk.set_default_size(1, 1);
         if Wayland::detect_wayland() {
             let wayland = Wayland::new(chunk.clone(), self.anchors, self.margins, self.layer);
 
