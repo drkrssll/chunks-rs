@@ -4,8 +4,8 @@ use gio::prelude::Cast;
 use gtk4::{
     gdk::Display,
     prelude::{BoxExt, WidgetExt},
-    style_context_add_provider_for_display, Align, Box, CssProvider, Label, Orientation, Revealer,
-    RevealerTransitionType, Widget, STYLE_PROVIDER_PRIORITY_APPLICATION,
+    style_context_add_provider_for_display, Align, Box, Button, CssProvider, Label, Orientation,
+    Revealer, RevealerTransitionType, Widget, STYLE_PROVIDER_PRIORITY_APPLICATION,
 };
 
 /// Creates a new GTK4 `Label` with a specified CSS class name.
@@ -59,13 +59,14 @@ pub fn tag_container(
 
 /// Creates a new GTK4 `Button` with a specified CSS class name.
 pub fn tag_button(class_name: &str) -> Tag {
-    let tag = gtk4::Button::new();
+    let tag = Button::new();
 
     tag.set_widget_name(class_name);
 
     Tag::Button(tag)
 }
 
+/// Creates a new GTK4 `Revealer` with a specified CSS class name.
 pub fn tag_revealer(
     class_name: &str,
     child: Tag,
@@ -73,10 +74,11 @@ pub fn tag_revealer(
     transition: RevealerTransitionType,
 ) -> Tag {
     let tag = Revealer::new();
+
     tag.set_transition_duration(duration);
     tag.set_transition_type(transition);
-
     tag.set_widget_name(class_name);
+
     match child {
         Tag::Box(box_) => tag.set_child(Some(&box_)),
         Tag::Label(label) => tag.set_child(Some(&label)),
