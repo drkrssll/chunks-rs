@@ -7,7 +7,7 @@ use dbus::blocking::Connection;
 use gio::glib::ControlFlow;
 use gtk4::{
     glib::timeout_add_seconds_local,
-    prelude::{BoxExt, ButtonExt, WidgetExt},
+    prelude::{BoxExt, ButtonExt},
     Picture,
 };
 use networkmanager::{
