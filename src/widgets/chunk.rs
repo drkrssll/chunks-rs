@@ -2,7 +2,8 @@ use crate::{Builder, Wayland};
 
 use gio::prelude::Cast;
 use gtk4::{
-    prelude::GtkWindowExt, Application, ApplicationWindow, Box, Button, Label, Revealer, Widget,
+    prelude::GtkWindowExt, Application, ApplicationWindow, Box, Button, Label, Revealer,
+    ScrolledWindow, Widget,
 };
 use gtk4_layer_shell::{Edge, Layer};
 
@@ -12,6 +13,7 @@ pub enum Tag {
     Box(Box),
     Button(Button),
     Revealer(Revealer),
+    Scroller(ScrolledWindow),
     Undefined,
 }
 
@@ -21,6 +23,8 @@ pub struct Chunk {
     factory: Application,
     title: String,
     tag: Tag,
+    width: i32,
+    height: i32,
     margins: Vec<(Edge, i32)>,
     anchors: Vec<(Edge, bool)>,
     layer: Layer,
@@ -33,6 +37,8 @@ impl Chunk {
         factory: Application,
         title: &str,
         tag: Tag,
+        width: i32,
+        height: i32,
         margins: Vec<(Edge, i32)>,
         anchors: Vec<(Edge, bool)>,
         layer: Layer,
@@ -42,6 +48,8 @@ impl Chunk {
             factory,
             title: title.to_string(),
             tag,
+            width,
+            height,
             margins,
             anchors,
             layer,
@@ -58,6 +66,7 @@ impl Builder for Chunk {
             Tag::Box(box_) => box_.upcast::<Widget>(),
             Tag::Button(button) => button.upcast::<Widget>(),
             Tag::Revealer(revealer) => revealer.upcast::<Widget>(),
+            Tag::Scroller(scroller) => scroller.upcast::<Widget>(),
             Tag::Undefined => panic!("Tag is undefined!"),
         };
 
@@ -68,7 +77,15 @@ impl Builder for Chunk {
             .resizable(self.resize)
             .build();
 
-        chunk.set_default_size(1, 1);
+        if self.width != -1 && self.height != -1 {
+            chunk.set_default_size(self.width, self.height);
+        } else if self.width != -1 && self.height == -1 {
+            chunk.set_default_size(self.width, 1);
+        } else if self.width == -1 && self.height != -1 {
+            chunk.set_default_size(1, self.height);
+        } else {
+            chunk.set_default_size(1, 1);
+        }
         if Wayland::detect_wayland() {
             let wayland = Wayland::new(chunk.clone(), self.anchors, self.margins, self.layer);
 
