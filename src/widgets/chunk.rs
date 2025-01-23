@@ -1,4 +1,4 @@
-use crate::{Builder, Wayland};
+use crate::Wayland;
 
 use gio::prelude::Cast;
 use gtk4::{
@@ -56,32 +56,35 @@ impl Chunk {
     pub fn set_dimensions(&self, width: u32, height: u32) {
         if let Some(chunk) = &self.chunk {
             chunk.set_default_size(width as i32, height as i32);
-        } else {
-            eprintln!("Error: Chunk has not been built yet!");
         }
     }
-}
 
-impl Builder for Chunk {
-    fn build(mut self) {
+    /// Different from the `Plate` and `Bar` builders, the `Chunk` build() returns Self for
+    /// subsequent method chaining.
+    pub fn build(mut self) -> Self {
         let child = match self.tag {
-            Tag::Label(label) => label.upcast::<Widget>(),
-            Tag::Box(box_) => box_.upcast::<Widget>(),
-            Tag::Button(button) => button.upcast::<Widget>(),
-            Tag::Revealer(revealer) => revealer.upcast::<Widget>(),
-            Tag::Scroller(scroller) => scroller.upcast::<Widget>(),
+            Tag::Label(ref label) => label.clone().upcast::<Widget>(),
+            Tag::Box(ref box_) => box_.clone().upcast::<Widget>(),
+            Tag::Button(ref button) => button.clone().upcast::<Widget>(),
+            Tag::Revealer(ref revealer) => revealer.clone().upcast::<Widget>(),
+            Tag::Scroller(ref scroller) => scroller.clone().upcast::<Widget>(),
             Tag::Undefined => panic!("Tag is undefined!"),
         };
 
         let chunk = ApplicationWindow::builder()
             .application(&self.factory)
-            .title(self.title)
+            .title(self.title.clone())
             .child(&child)
             .resizable(self.resize)
             .build();
 
         if Wayland::detect_wayland() {
-            let wayland = Wayland::new(chunk.clone(), self.anchors, self.margins, self.layer);
+            let wayland = Wayland::new(
+                chunk.clone(),
+                self.anchors.clone(),
+                self.margins.clone(),
+                self.layer,
+            );
             wayland.setup_window()
         }
 
@@ -89,5 +92,6 @@ impl Builder for Chunk {
         chunk.present();
 
         self.chunk = Some(chunk);
+        self
     }
 }
