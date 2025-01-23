@@ -48,6 +48,7 @@ impl Builder for Plate {
             Tag::Box(box_) => box_.upcast::<Widget>(),
             Tag::Button(button) => button.upcast::<Widget>(),
             Tag::Revealer(revealer) => revealer.upcast::<Widget>(),
+            Tag::Scroller(scroller) => scroller.clone().upcast::<Widget>(),
             Tag::Undefined => panic!("Tag is undefined!"),
         };
 

@@ -5,7 +5,7 @@ use gtk4::{
     gdk::Display,
     prelude::{BoxExt, WidgetExt},
     style_context_add_provider_for_display, Align, Box, Button, CssProvider, Label, Orientation,
-    Revealer, RevealerTransitionType, Widget, STYLE_PROVIDER_PRIORITY_APPLICATION,
+    Revealer, RevealerTransitionType, ScrolledWindow, Widget, STYLE_PROVIDER_PRIORITY_APPLICATION,
 };
 
 /// Creates a new GTK4 `Label` with a specified CSS class name.
@@ -46,6 +46,7 @@ pub fn tag_container(
             Tag::Box(box_) => box_.clone().upcast::<Widget>(),
             Tag::Button(button) => button.clone().upcast::<Widget>(),
             Tag::Revealer(revealer) => revealer.clone().upcast::<Widget>(),
+            Tag::Scroller(scroller) => scroller.clone().upcast::<Widget>(),
             Tag::Undefined => panic!("Tag is undefined!"),
         })
         .collect();
@@ -90,6 +91,22 @@ pub fn tag_revealer(
     Tag::Revealer(tag)
 }
 
+pub fn tag_scroller(class_name: &str, child: Tag, _vscroll: bool, _hscroll: bool) -> Tag {
+    let tag = ScrolledWindow::new();
+    // tag.set_max_content_width(60);
+    // tag.set_max_content_height(20);
+    tag.set_widget_name(class_name);
+    match child {
+        Tag::Box(box_) => tag.set_child(Some(&box_)),
+        Tag::Label(label) => tag.set_child(Some(&label)),
+        Tag::Button(button) => tag.set_child(Some(&button)),
+        Tag::Revealer(revealer) => tag.set_child(Some(&revealer)),
+        _ => return Tag::Undefined,
+    }
+    println!("{:?}", tag.hadjustment());
+    Tag::Scroller(tag)
+}
+
 /// Positions a GTK4 `Tag` (for use inside of Bar)
 // private because it doesnt work? (or i dont know what im doing)
 // fuck it, ill just use CSS for this shit anyways
@@ -110,6 +127,10 @@ fn tag_position(tag: &Tag, x: Align, y: Align) {
         Tag::Revealer(revealer) => {
             revealer.set_halign(x);
             revealer.set_valign(y);
+        }
+        Tag::Scroller(scroller) => {
+            scroller.set_halign(x);
+            scroller.set_valign(y);
         }
         Tag::Undefined => {
             panic!("Tag is undefined!");

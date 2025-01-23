@@ -1,8 +1,9 @@
-use crate::{Builder, Wayland};
+use crate::Wayland;
 
 use gio::prelude::Cast;
 use gtk4::{
-    prelude::GtkWindowExt, Application, ApplicationWindow, Box, Button, Label, Revealer, Widget,
+    prelude::GtkWindowExt, Application, ApplicationWindow, Box, Button, Label, Revealer,
+    ScrolledWindow, Widget,
 };
 use gtk4_layer_shell::{Edge, Layer};
 
@@ -12,11 +13,13 @@ pub enum Tag {
     Box(Box),
     Button(Button),
     Revealer(Revealer),
+    Scroller(ScrolledWindow),
     Undefined,
 }
 
 /// Represents a GTK4 window with a configuration for positioning/display on Wayland.
 /// The tag represents a text box with a CSS class name for styling.
+#[derive(Clone)]
 pub struct Chunk {
     factory: Application,
     title: String,
@@ -25,10 +28,10 @@ pub struct Chunk {
     anchors: Vec<(Edge, bool)>,
     layer: Layer,
     resize: bool,
+    chunk: Option<ApplicationWindow>,
 }
 
 impl Chunk {
-    /// Creates a new `Chunk` instance with the given parameters.
     pub fn new(
         factory: Application,
         title: &str,
@@ -46,37 +49,49 @@ impl Chunk {
             anchors,
             layer,
             resize,
+            chunk: None,
         }
     }
-}
 
-impl Builder for Chunk {
-    /// Builds and displays the `Chunk` window, configuring it for Wayland if detected.
-    fn build(self) {
+    pub fn set_dimensions(&self, width: u32, height: u32) {
+        if let Some(chunk) = &self.chunk {
+            chunk.set_default_size(width as i32, height as i32);
+        }
+    }
+
+    /// Different from the `Plate` and `Bar` builders, the `Chunk` build() returns Self for
+    /// subsequent method chaining.
+    pub fn build(mut self) -> Self {
         let child = match self.tag {
-            Tag::Label(label) => label.upcast::<Widget>(),
-            Tag::Box(box_) => box_.upcast::<Widget>(),
-            Tag::Button(button) => button.upcast::<Widget>(),
-            Tag::Revealer(revealer) => revealer.upcast::<Widget>(),
+            Tag::Label(ref label) => label.clone().upcast::<Widget>(),
+            Tag::Box(ref box_) => box_.clone().upcast::<Widget>(),
+            Tag::Button(ref button) => button.clone().upcast::<Widget>(),
+            Tag::Revealer(ref revealer) => revealer.clone().upcast::<Widget>(),
+            Tag::Scroller(ref scroller) => scroller.clone().upcast::<Widget>(),
             Tag::Undefined => panic!("Tag is undefined!"),
         };
 
         let chunk = ApplicationWindow::builder()
             .application(&self.factory)
-            .title(self.title)
+            .title(self.title.clone())
             .child(&child)
             .resizable(self.resize)
             .build();
 
-        chunk.set_default_size(1, 1);
         if Wayland::detect_wayland() {
-            let wayland = Wayland::new(chunk.clone(), self.anchors, self.margins, self.layer);
-
+            let wayland = Wayland::new(
+                chunk.clone(),
+                self.anchors.clone(),
+                self.margins.clone(),
+                self.layer,
+            );
             wayland.setup_window()
         }
 
         chunk.set_decorated(false);
+        chunk.present();
 
-        chunk.present()
+        self.chunk = Some(chunk);
+        self
     }
 }

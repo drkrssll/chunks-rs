@@ -51,6 +51,7 @@ impl Builder for Bar {
                 Tag::Box(box_) => box_.clone().upcast::<Widget>(),
                 Tag::Button(button) => button.clone().upcast::<Widget>(),
                 Tag::Revealer(revealer) => revealer.clone().upcast::<Widget>(),
+                Tag::Scroller(scroller) => scroller.clone().upcast::<Widget>(),
                 Tag::Undefined => panic!("Tag is undefined!"),
             };
 
