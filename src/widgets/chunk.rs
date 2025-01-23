@@ -19,6 +19,7 @@ pub enum Tag {
 
 /// Represents a GTK4 window with a configuration for positioning/display on Wayland.
 /// The tag represents a text box with a CSS class name for styling.
+#[derive(Clone)]
 pub struct Chunk {
     factory: Application,
     title: String,
@@ -28,21 +29,6 @@ pub struct Chunk {
     layer: Layer,
     resize: bool,
     chunk: Option<ApplicationWindow>,
-}
-
-impl Clone for Chunk {
-    fn clone(&self) -> Self {
-        Self {
-            factory: self.factory.clone(),
-            title: self.title.clone(),
-            tag: self.tag.clone(),
-            margins: self.margins.clone(),
-            anchors: self.anchors.clone(),
-            layer: self.layer,
-            resize: self.resize,
-            chunk: self.chunk.clone(),
-        }
-    }
 }
 
 impl Chunk {
