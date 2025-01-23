@@ -1,3 +1,5 @@
+use std::cell::RefCell;
+
 use crate::{Builder, Wayland};
 
 use gio::prelude::Cast;
@@ -27,7 +29,7 @@ pub struct Chunk {
     anchors: Vec<(Edge, bool)>,
     layer: Layer,
     resize: bool,
-    chunk: Option<ApplicationWindow>,
+    chunk: RefCell<Option<ApplicationWindow>>,
 }
 
 impl Chunk {
@@ -48,12 +50,12 @@ impl Chunk {
             anchors,
             layer,
             resize,
-            chunk: None,
+            chunk: None.into(),
         }
     }
 
     pub fn set_dimensions(&self, width: u32, height: u32) {
-        if let Some(chunk) = &self.chunk {
+        if let Some(chunk) = self.chunk.borrow().as_ref() {
             chunk.set_default_size(width as i32, height as i32);
         } else {
             eprintln!("Error: Chunk has not been built yet!");
@@ -62,7 +64,7 @@ impl Chunk {
 }
 
 impl Builder for Chunk {
-    fn build(mut self) {
+    fn build(self) {
         let child = match self.tag {
             Tag::Label(label) => label.upcast::<Widget>(),
             Tag::Box(box_) => box_.upcast::<Widget>(),
@@ -87,6 +89,6 @@ impl Builder for Chunk {
         chunk.set_decorated(false);
         chunk.present();
 
-        self.chunk = Some(chunk);
+        *self.chunk.borrow_mut() = Some(chunk);
     }
 }
